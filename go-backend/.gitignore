@@ -20,6 +20,6 @@
 # Go workspace file
 go.work
 .do.swp
-go-backend/.env
+.env
 app
 .idea
