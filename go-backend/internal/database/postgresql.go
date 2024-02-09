@@ -34,9 +34,29 @@ func ConnectDatabase() {
 		fmt.Println("Successfully connected to database!")
 	}
 
-	_, err = Db.Exec("")
+	// Создаем таблицы при подключении к базе данных
+	createTablesQuery := `
+	CREATE TABLE IF NOT EXISTS vetdonor_users (
+		id SERIAL PRIMARY KEY,
+		email VARCHAR(255) NOT NULL UNIQUE,
+		password VARCHAR(255) NOT NULL,
+		name VARCHAR(255) NOT NULL
+	);
+
+	CREATE TABLE IF NOT EXISTS vetdonor_clinic (
+		id SERIAL PRIMARY KEY,
+		email VARCHAR(255) NOT NULL UNIQUE,
+		password VARCHAR(255) NOT NULL,
+		name VARCHAR(255) NOT NULL,
+		address VARCHAR(255) NOT NULL
+	);
+`
+	_, err = Db.Exec(createTablesQuery)
 	if err != nil {
-		fmt.Println("Произошла ошибка при создании таблиц:", err)
+		fmt.Println("Произошла ошибка при создании таблицы:", err)
 		panic(err)
+	} else {
+		fmt.Println("Таблицы успешно созданы или уже существуют")
 	}
+
 }
