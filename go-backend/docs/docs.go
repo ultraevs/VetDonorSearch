@@ -14,7 +14,210 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/v1/clinic_create": {
+            "post": {
+                "description": "Создает новый аккаунт клиники с предоставленным email, паролем, именем и адрессом.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Создать новоый аккаунт клиники",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ClinicCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Аккаунт клиники успешно создан",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать аккаунт клиники",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/login": {
+            "post": {
+                "description": "Авторизует пользователя с предоставленным email и паролем.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Логин",
+                "parameters": [
+                    {
+                        "description": "Запрос на авторизацию пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось авторизовать пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user_create": {
+            "post": {
+                "description": "Создает нового пользователя с предоставленным email, паролем и именем.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Создать нового пользователя",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно создан",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.ClinicCreateRequest": {
+            "type": "object",
+            "required": [
+                "Name",
+                "address",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CodeResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.LoginRequest": {
+            "type": "object",
+            "required": [
+                "ID",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserCreateRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

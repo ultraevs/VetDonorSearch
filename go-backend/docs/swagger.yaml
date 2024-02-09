@@ -1,4 +1,139 @@
+definitions:
+  model.ClinicCreateRequest:
+    properties:
+      Name:
+        type: string
+      address:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - Name
+    - address
+    - email
+    - password
+    type: object
+  model.CodeResponse:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  model.LoginRequest:
+    properties:
+      ID:
+        type: integer
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - ID
+    - email
+    - password
+    type: object
+  model.UserCreateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /v1/clinic_create:
+    post:
+      consumes:
+      - application/json
+      description: Создает новый аккаунт клиники с предоставленным email, паролем,
+        именем и адрессом.
+      parameters:
+      - description: Запрос на создание пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ClinicCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Аккаунт клиники успешно создан
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать аккаунт клиники
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать новоый аккаунт клиники
+      tags:
+      - Auth
+  /v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизует пользователя с предоставленным email и паролем.
+      parameters:
+      - description: Запрос на авторизацию пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь авторизован
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось авторизовать пользователя
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Логин
+      tags:
+      - Auth
+  /v1/user_create:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя с предоставленным email, паролем и
+        именем.
+      parameters:
+      - description: Запрос на создание пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь успешно создан
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать пользователя
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать нового пользователя
+      tags:
+      - Auth
 swagger: "2.0"
