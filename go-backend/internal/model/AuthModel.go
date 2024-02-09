@@ -18,17 +18,11 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type UserResponse struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Password string `json:"pass"`
+type ForgotRequest struct {
+	Email string `json:"email" binding:"required"`
 }
 
-type ClinicResponse struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Address  string `json:"address"`
-	Name     string `json:"name"`
-	Password string `json:"pass"`
+type NewPassword struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }

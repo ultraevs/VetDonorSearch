@@ -55,6 +55,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/forgot": {
+            "post": {
+                "description": "Инициирует восстановление пароля по email.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Восстановление",
+                "parameters": [
+                    {
+                        "description": "Запрос на инициацию восстановления пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ForgotRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Процесс восстановления начат",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось начать процесс восстановления",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/login": {
             "post": {
                 "description": "Авторизует пользователя с предоставленным email и паролем.",
@@ -88,6 +128,82 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось авторизовать пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/newpass": {
+            "get": {
+                "description": "Новый пароль для восстановления пароля по email.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Новый пароль",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Токен восстановления пароля",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Процесс восстановления завершен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось завершить процесс восстановления",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Сохранение нового пароля .",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Добавление нового пароля в БД",
+                "parameters": [
+                    {
+                        "description": "Новый пароль пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.NewPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пароль сохранен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось сохранить пароль",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -179,17 +295,39 @@ const docTemplate = `{
                 }
             }
         },
+        "model.ForgotRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "model.LoginRequest": {
             "type": "object",
             "required": [
-                "ID",
                 "email",
                 "password"
             ],
             "properties": {
-                "ID": {
-                    "type": "integer"
+                "email": {
+                    "type": "string"
                 },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.NewPassword": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
                 "email": {
                     "type": "string"
                 },

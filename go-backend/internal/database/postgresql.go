@@ -34,7 +34,6 @@ func ConnectDatabase() {
 		fmt.Println("Successfully connected to database!")
 	}
 
-	// Создаем таблицы при подключении к базе данных
 	createTablesQuery := `
 	CREATE TABLE IF NOT EXISTS vetdonor_users (
 		id SERIAL PRIMARY KEY,
@@ -53,10 +52,10 @@ func ConnectDatabase() {
 `
 	_, err = Db.Exec(createTablesQuery)
 	if err != nil {
-		fmt.Println("Произошла ошибка при создании таблицы:", err)
+		fmt.Println("An error occurred while creating the table:", err)
 		panic(err)
 	} else {
-		fmt.Println("Таблицы успешно созданы или уже существуют")
+		fmt.Println("Tables have been created successfully or already exist")
 	}
 
 }

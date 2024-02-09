@@ -41,5 +41,5 @@ func (router *Router) Setup() {
 	router.engine.GET("v1/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := router.engine.Group("/v1")
-	router.UserRoutes(v1)
+	router.AuthRoutes(v1)
 }
