@@ -149,6 +149,7 @@ func Login(context *gin.Context) {
 		domain = "vetdonor.shmyaks.ru"
 	}
 	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	context.Set("Authorization", tokenString)
 	context.JSON(http.StatusOK, gin.H{"response": "success"})
 }
 
