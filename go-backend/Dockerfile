@@ -8,7 +8,6 @@ RUN go mod download
 
 COPY cmd/ ./cmd/
 COPY internal/ ./internal/
-COPY templates/ ./templates/
 COPY .env .
 
 RUN go install github.com/swaggo/swag/cmd/swag@latest

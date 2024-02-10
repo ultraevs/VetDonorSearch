@@ -142,7 +142,13 @@ func Login(context *gin.Context) {
 	}
 
 	context.SetSameSite(http.SameSiteLaxMode)
-	context.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
 	context.JSON(http.StatusOK, gin.H{"response": "success"})
 }
 
