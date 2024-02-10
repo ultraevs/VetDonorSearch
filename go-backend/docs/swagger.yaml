@@ -199,6 +199,25 @@ paths:
       summary: Добавление нового пароля в БД
       tags:
       - Auth
+  /v1/profile:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает данные пользователя для старнички "profile".
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Профиль получен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить профиль
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Профиль
+      tags:
+      - User
   /v1/user_create:
     post:
       consumes:

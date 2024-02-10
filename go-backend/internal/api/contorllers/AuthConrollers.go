@@ -102,34 +102,32 @@ func Login(context *gin.Context) {
 	}
 
 	var form model.LoginRequest
-	err := database.Db.QueryRow("SELECT email, password FROM vetdonor_users WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
+	isFind := [2]bool{true, true}
+	err := database.Db.QueryRow("SELECT email, password FROM vetdonor_clinic WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
 	if err == nil {
 		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
 			return
+		} else if errors.Is(err, sql.ErrNoRows) {
+			isFind[0] = false
 		}
-		context.JSON(http.StatusOK, gin.H{"user": form})
-		return
-	} else if !errors.Is(err, sql.ErrNoRows) {
-		fmt.Println(err)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-		return
 	}
 
-	err = database.Db.QueryRow("SELECT email, password FROM vetdonor_clinic WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
+	err = database.Db.QueryRow("SELECT email, password FROM vetdonor_users WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
 	if err == nil {
 		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
 			return
 		}
-		context.JSON(http.StatusOK, gin.H{"clinic": form})
-		return
 	} else if errors.Is(err, sql.ErrNoRows) {
-		context.JSON(http.StatusNotFound, gin.H{"error": "User is not found"})
+		isFind[1] = false
+	}
+	fmt.Println(body.Email, form.Password, body.Password)
+	fmt.Println(isFind)
+	if isFind[0] == false && isFind[1] == false {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "User/Clinic isn't founded"})
 		return
 	}
-	context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-	fmt.Println(form.Password, body.Password)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": form.Email,
@@ -212,7 +210,7 @@ func ForgotPassword(context *gin.Context) {
 	if os.Getenv("SETUP_TYPE") == "local" {
 		link = "http://localhost:8083/newpass?token=" + token
 	} else {
-		link = "http://vetdonor.shmyaks.ru/newpass?token=" + token
+		link = "https://vetdonor.shmyaks.ru/newpass?token=" + token
 	}
 	content := fmt.Sprintf(`
 	<h1>Здравствуйте, вы сделали запрос на восстановление пароля. Чтобы сменить пароль, перейдите по ссылке:</h1>
@@ -295,7 +293,7 @@ func PostNewPassword(context *gin.Context) {
 		return
 	}
 
-	_, err = database.Db.Exec(fmt.Sprintf("UPDATE %s SET password = $1 WHERE email = $2", tableName), string(hashPass), body.Email)
+	_, err = database.Db.Exec("UPDATE "+tableName+" SET password = $1 WHERE email = $2", string(hashPass), body.Email)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update password"})
 		return

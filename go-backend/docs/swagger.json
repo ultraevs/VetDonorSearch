@@ -200,6 +200,35 @@
                 }
             }
         },
+        "/v1/profile": {
+            "get": {
+                "description": "Возвращает данные пользователя для старнички \"profile\".",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Профиль",
+                "responses": {
+                    "200": {
+                        "description": "Профиль получен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить профиль",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user_create": {
             "post": {
                 "description": "Создает нового пользователя с предоставленным email, паролем и именем.",
