@@ -1,0 +1,229 @@
+definitions:
+  model.ClinicCreateRequest:
+    properties:
+      Name:
+        type: string
+      address:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - Name
+    - address
+    - email
+    - password
+    type: object
+  model.CodeResponse:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  model.ForgotRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  model.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.NewPassword:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.UserCreateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/clinic_create:
+    post:
+      consumes:
+      - application/json
+      description: Создает новый аккаунт клиники с предоставленным email, паролем,
+        именем и адрессом.
+      parameters:
+      - description: Запрос на создание пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ClinicCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Аккаунт клиники успешно создан
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать аккаунт клиники
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать новоый аккаунт клиники
+      tags:
+      - Auth
+  /v1/forgot:
+    post:
+      consumes:
+      - application/json
+      description: Инициирует восстановление пароля по email.
+      parameters:
+      - description: Запрос на инициацию восстановления пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ForgotRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Процесс восстановления начат
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось начать процесс восстановления
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Восстановление
+      tags:
+      - Auth
+  /v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизует пользователя с предоставленным email и паролем.
+      parameters:
+      - description: Запрос на авторизацию пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь авторизован
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось авторизовать пользователя
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Логин
+      tags:
+      - Auth
+  /v1/newpass:
+    get:
+      consumes:
+      - application/json
+      description: Новый пароль для восстановления пароля по email.
+      parameters:
+      - description: Токен восстановления пароля
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Процесс восстановления завершен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось завершить процесс восстановления
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Новый пароль
+      tags:
+      - Auth
+    post:
+      consumes:
+      - application/json
+      description: Сохранение нового пароля .
+      parameters:
+      - description: Новый пароль пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.NewPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пароль сохранен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось сохранить пароль
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Добавление нового пароля в БД
+      tags:
+      - Auth
+  /v1/user_create:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя с предоставленным email, паролем и
+        именем.
+      parameters:
+      - description: Запрос на создание пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь успешно создан
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать пользователя
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать нового пользователя
+      tags:
+      - Auth
+swagger: "2.0"
