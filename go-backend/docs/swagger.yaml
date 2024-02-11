@@ -54,6 +54,40 @@ definitions:
     - email
     - password
     type: object
+  model.OneOfUserClinicQuestionnaireResponse:
+    properties:
+      age:
+        type: string
+      bloodType:
+        type: string
+      bloodTypes:
+        additionalProperties: true
+        type: object
+      breed:
+        type: string
+      city:
+        type: string
+      contacts:
+        type: string
+      petName:
+        type: string
+      surname:
+        type: string
+      workHours:
+        type: string
+    required:
+    - age
+    - bloodType
+    - bloodTypes
+    - breed
+    - city
+    - contacts
+    - petName
+    - surname
+    - workHours
+    type: object
+  model.QuestionnaireRequest:
+    type: object
   model.UserCreateRequest:
     properties:
       email:
@@ -97,6 +131,30 @@ paths:
       summary: Создать новоый аккаунт клиники
       tags:
       - Auth
+  /v1/create_questionnaire:
+    post:
+      description: Создает анкету пользователя или клиники
+      parameters:
+      - description: Запрос на создание анкеты пользователя или клиники
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.QuestionnaireRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное создание анкеты
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать анкету
+      tags:
+      - User
   /v1/forgot:
     post:
       consumes:
@@ -199,23 +257,23 @@ paths:
       summary: Добавление нового пароля в БД
       tags:
       - Auth
-  /v1/profile:
+  /v1/questionnaire:
     get:
       consumes:
       - application/json
-      description: Возвращает данные пользователя для старнички "profile".
+      description: Возвращает анкету пользователя для старнички "profile".
       produces:
       - application/json
       responses:
         "200":
-          description: Профиль получен
+          description: Анкета получена
           schema:
-            $ref: '#/definitions/model.CodeResponse'
+            $ref: '#/definitions/model.OneOfUserClinicQuestionnaireResponse'
         "400":
-          description: Не удалось получить профиль
+          description: Не удалось получить анкету
           schema:
             $ref: '#/definitions/model.ErrorResponse'
-      summary: Профиль
+      summary: Анкета
       tags:
       - User
   /v1/user_create:

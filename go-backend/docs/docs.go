@@ -55,6 +55,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/create_questionnaire": {
+            "post": {
+                "description": "Создает анкету пользователя или клиники",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Создать анкету",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание анкеты пользователя или клиники",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.QuestionnaireRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное создание анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/forgot": {
             "post": {
                 "description": "Инициирует восстановление пароля по email.",
@@ -211,9 +248,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/profile": {
+        "/v1/questionnaire": {
             "get": {
-                "description": "Возвращает данные пользователя для старнички \"profile\".",
+                "description": "Возвращает анкету пользователя для старнички \"profile\".",
                 "consumes": [
                     "application/json"
                 ],
@@ -223,16 +260,16 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Профиль",
+                "summary": "Анкета",
                 "responses": {
                     "200": {
-                        "description": "Профиль получен",
+                        "description": "Анкета получена",
                         "schema": {
-                            "$ref": "#/definitions/model.CodeResponse"
+                            "$ref": "#/definitions/model.OneOfUserClinicQuestionnaireResponse"
                         }
                     },
                     "400": {
-                        "description": "Не удалось получить профиль",
+                        "description": "Не удалось получить анкету",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -364,6 +401,53 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "model.OneOfUserClinicQuestionnaireResponse": {
+            "type": "object",
+            "required": [
+                "age",
+                "bloodType",
+                "bloodTypes",
+                "breed",
+                "city",
+                "contacts",
+                "petName",
+                "surname",
+                "workHours"
+            ],
+            "properties": {
+                "age": {
+                    "type": "string"
+                },
+                "bloodType": {
+                    "type": "string"
+                },
+                "bloodTypes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "breed": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "contacts": {
+                    "type": "string"
+                },
+                "petName": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "workHours": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.QuestionnaireRequest": {
+            "type": "object"
         },
         "model.UserCreateRequest": {
             "type": "object",
