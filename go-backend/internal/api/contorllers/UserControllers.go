@@ -11,6 +11,45 @@ import (
 	"net/http"
 )
 
+// Profile Профиль пользователя.
+// @Summary Профиль
+// @Description Возвращает профиль пользователя.
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CodeResponse "Профиль получена"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить профиль"
+// @Tags User
+// @Router /v1/profile [get]
+func Profile(context *gin.Context) {
+	email := context.MustGet("Email").(string)
+	Type := context.MustGet("Type").(string)
+	switch Type {
+	case "user":
+		{
+			var user model.UserInfo
+			err := database.Db.QueryRow("SELECT name, email FROM vetdonor_users WHERE email = $1", email).Scan(&user.Name, &user.Email)
+			if err != nil {
+				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find User"})
+				return
+			}
+			context.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email})
+			return
+		}
+	case "clinic":
+		{
+			var clinic model.ClinicInfo
+			err := database.Db.QueryRow("SELECT name, email, address FROM vetdonor_clinic WHERE email = $1", email).Scan(&clinic.Name, &clinic.Email, &clinic.Address)
+			if err != nil {
+				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find Clinic"})
+				return
+			}
+			context.JSON(http.StatusOK, gin.H{"name": clinic.Name, "email": clinic.Email, "address": clinic.Address})
+			return
+		}
+	}
+
+}
+
 // UserQuestionnaire Анкета пользователя.
 // @Summary Анкета
 // @Description Возвращает анкету пользователя для старнички "profile".

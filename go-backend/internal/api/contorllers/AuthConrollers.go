@@ -103,6 +103,7 @@ func Login(context *gin.Context) {
 
 	var form model.LoginRequest
 	isFind := [2]bool{true, true}
+	var formType string
 	err := database.Db.QueryRow("SELECT email, password FROM vetdonor_clinic WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
 	if err == nil {
 		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
@@ -110,6 +111,8 @@ func Login(context *gin.Context) {
 			return
 		} else if errors.Is(err, sql.ErrNoRows) {
 			isFind[0] = false
+		} else {
+			formType = "clinic"
 		}
 	}
 
@@ -121,6 +124,8 @@ func Login(context *gin.Context) {
 		}
 	} else if errors.Is(err, sql.ErrNoRows) {
 		isFind[1] = false
+	} else {
+		formType = "user"
 	}
 	fmt.Println(body.Email, form.Password, body.Password)
 	fmt.Println(isFind)
@@ -130,8 +135,9 @@ func Login(context *gin.Context) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": form.Email,
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"sub":  form.Email,
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"type": formType,
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 	if err != nil {

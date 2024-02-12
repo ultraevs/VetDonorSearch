@@ -27,8 +27,9 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			Email := claims["sub"].(string)
-
+			Type := claims["type"].(string)
 			context.Set("Email", Email)
+			context.Set("Type", Type)
 			context.Next()
 		} else {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Bad Token"})
