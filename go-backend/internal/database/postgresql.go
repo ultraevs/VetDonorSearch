@@ -67,6 +67,12 @@ func ConnectDatabase() {
 		workhours VARCHAR(255) NOT NULL,
 		contacts VARCHAR(255) NOT NULL
 	);
+
+	CREATE TABLE IF NOT EXISTS vetdonor_need (
+	  	id SERIAL PRIMARY KEY,
+		email VARCHAR(255) NOT NULL UNIQUE,
+	    name VARCHAR(255) NOT NULL UNIQUE
+	);
 `
 	_, err = Db.Exec(createTablesQuery)
 	if err != nil {

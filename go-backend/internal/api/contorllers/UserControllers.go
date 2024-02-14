@@ -217,3 +217,24 @@ func GetProfile(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email})
 }
+
+// MarkAsNeed Пометить анкету как нуждающегося.
+// @Summary Пометить анкету как нуждающегося
+// @Description Помещает анкету в отдельную базу нуждающихся
+// @Consumes application/json
+// @Produce json
+// @Param request body model.UserInfo true "Запрос на перемещение анкеты пользователя в раздел нуждающихся"
+// @Success 200 {object} model.CodeResponse "Успешное перемещение анкеты"
+// @Failure 400 {object} model.ErrorResponse "Не удалось переместить анкету"
+// @Tags User
+// @Router /v1/mark [post]
+func MarkAsNeed(context *gin.Context) {
+	var user model.UserInfo
+	_, err := database.Db.Exec("INSERT INTO vetdonor_need(email, name) VALUES ($1, $2)", user.Email, user.Name)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to move user's questionnaire"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "User's questionnaire moved successfully"})
+}
