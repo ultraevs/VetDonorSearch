@@ -266,7 +266,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Профиль получена
+          description: Профиль получен
           schema:
             $ref: '#/definitions/model.CodeResponse'
         "400":
@@ -274,6 +274,31 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResponse'
       summary: Профиль
+      tags:
+      - User
+  /v1/profile/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает профиль другого пользователя.
+      parameters:
+      - description: user's email key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Профиль получен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить профиль
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Чужой Профиль
       tags:
       - User
   /v1/questionnaire:

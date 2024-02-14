@@ -263,7 +263,45 @@ const docTemplate = `{
                 "summary": "Профиль",
                 "responses": {
                     "200": {
-                        "description": "Профиль получена",
+                        "description": "Профиль получен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить профиль",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/profile/{key}": {
+            "get": {
+                "description": "Возвращает профиль другого пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Чужой Профиль",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user's email key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Профиль получен",
                         "schema": {
                             "$ref": "#/definitions/model.CodeResponse"
                         }

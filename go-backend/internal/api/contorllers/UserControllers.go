@@ -195,3 +195,25 @@ func CreateQuestionnaire(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid questionnaire type"})
 	}
 }
+
+// GetProfile Профиль другого пользователя.
+// @Summary Чужой Профиль
+// @Description Возвращает профиль другого пользователя.
+// @Accept json
+// @Produce json
+// @Param key path string true "user's email key"
+// @Success 200 {object} model.CodeResponse "Профиль получен"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить профиль"
+// @Tags User
+// @Router /v1/profile/{key} [get]
+func GetProfile(context *gin.Context) {
+	userEmail := context.Param("key")
+	var user model.UserInfo
+	err := database.Db.QueryRow("SELECT email, name FROM vetdonor_users WHERE email=$1", userEmail).Scan(&user.Email, &user.Name)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user's profile"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email})
+}
