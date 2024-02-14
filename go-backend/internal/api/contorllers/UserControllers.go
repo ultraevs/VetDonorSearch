@@ -16,19 +16,20 @@ import (
 // @Description Возвращает профиль пользователя.
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.CodeResponse "Профиль получена"
+// @Success 200 {object} model.CodeResponse "Профиль получен"
 // @Failure 400 {object} model.ErrorResponse "Не удалось получить профиль"
 // @Tags User
 // @Router /v1/profile [get]
 func Profile(context *gin.Context) {
 	email := context.MustGet("Email").(string)
 	Type := context.MustGet("Type").(string)
+	fmt.Println(email, Type)
 	switch Type {
 	case "user":
 		{
 			var user model.UserInfo
 			err := database.Db.QueryRow("SELECT name, email FROM vetdonor_users WHERE email = $1", email).Scan(&user.Name, &user.Email)
-			if err != nil {
+			if err != nil && !errors.Is(err, sql.ErrNoRows) {
 				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find User"})
 				return
 			}
@@ -39,7 +40,7 @@ func Profile(context *gin.Context) {
 		{
 			var clinic model.ClinicInfo
 			err := database.Db.QueryRow("SELECT name, email, address FROM vetdonor_clinic WHERE email = $1", email).Scan(&clinic.Name, &clinic.Email, &clinic.Address)
-			if err != nil {
+			if err != nil && !errors.Is(err, sql.ErrNoRows) {
 				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find Clinic"})
 				return
 			}
@@ -124,7 +125,7 @@ func CreateQuestionnaire(context *gin.Context) {
 
 		var existingUserID int
 		err := database.Db.QueryRow("SELECT id FROM vetdonor_user_questionnaire WHERE email = $1", user.Email).Scan(&existingUserID)
-		if err != nil && err != sql.ErrNoRows {
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
 			return
 		}
@@ -154,7 +155,7 @@ func CreateQuestionnaire(context *gin.Context) {
 
 		var existingClinicID int
 		err := database.Db.QueryRow("SELECT id FROM vetdonor_clinic_questionnaire WHERE email = $1", clinic.Email).Scan(&existingClinicID)
-		if err != nil && err != sql.ErrNoRows {
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
 			return
 		}

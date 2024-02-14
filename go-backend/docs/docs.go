@@ -248,6 +248,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/profile": {
+            "get": {
+                "description": "Возвращает профиль пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Профиль",
+                "responses": {
+                    "200": {
+                        "description": "Профиль получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить профиль",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/questionnaire": {
             "get": {
                 "description": "Возвращает анкету пользователя для старнички \"profile\".",

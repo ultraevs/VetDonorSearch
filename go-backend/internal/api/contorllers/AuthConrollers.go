@@ -109,11 +109,11 @@ func Login(context *gin.Context) {
 		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
 			return
-		} else if errors.Is(err, sql.ErrNoRows) {
-			isFind[0] = false
-		} else {
-			formType = "clinic"
 		}
+		formType = "clinic"
+
+	} else if errors.Is(err, sql.ErrNoRows) {
+		isFind[0] = false
 	}
 
 	err = database.Db.QueryRow("SELECT email, password FROM vetdonor_users WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
@@ -122,18 +122,14 @@ func Login(context *gin.Context) {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
 			return
 		}
+		formType = "user"
 	} else if errors.Is(err, sql.ErrNoRows) {
 		isFind[1] = false
-	} else {
-		formType = "user"
 	}
-	fmt.Println(body.Email, form.Password, body.Password)
-	fmt.Println(isFind)
 	if isFind[0] == false && isFind[1] == false {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "User/Clinic isn't founded"})
 		return
 	}
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":  form.Email,
 		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
