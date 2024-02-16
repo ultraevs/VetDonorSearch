@@ -207,15 +207,22 @@ func CreateQuestionnaire(context *gin.Context) {
 // @Tags User
 // @Router /v1/profile/{key} [get]
 func GetProfile(context *gin.Context) {
-	userEmail := context.Param("key")
-	var user model.UserInfo
-	err := database.Db.QueryRow("SELECT email, name FROM vetdonor_users WHERE email=$1", userEmail).Scan(&user.Email, &user.Name)
-	if err != nil {
-		fmt.Println(err)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user's profile"})
+	Email := context.Param("key")
+	var clinic model.ClinicInfo
+	err := database.Db.QueryRow("SELECT email, name, address FROM vetdonor_clinic WHERE email = $1", Email).Scan(&clinic.Email, &clinic.Name, &clinic.Address)
+	if err == nil {
+		context.JSON(http.StatusOK, gin.H{"email": clinic.Email, "name": clinic.Name, "address": clinic.Address})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email})
+
+	var user model.UserInfo
+	err = database.Db.QueryRow("SELECT email, name FROM vetdonor_users WHERE email = $1", Email).Scan(&user.Email, &user.Name)
+	if err == nil {
+		context.JSON(http.StatusOK, gin.H{"email": user.Email, "name": user.Name})
+		return
+	}
+
+	context.JSON(http.StatusNotFound, gin.H{"error": "Profile not found"})
 }
 
 // MarkAsNeed Пометить анкету как нуждающегося.
@@ -229,8 +236,26 @@ func GetProfile(context *gin.Context) {
 // @Tags User
 // @Router /v1/mark [post]
 func MarkAsNeed(context *gin.Context) {
-	var user model.UserInfo
-	_, err := database.Db.Exec("INSERT INTO vetdonor_need(email, name) VALUES ($1, $2)", user.Email, user.Name)
+	var request model.UserInfo
+	if err := context.ShouldBindJSON(&request); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+
+	var count int
+	err := database.Db.QueryRow("SELECT COUNT(*) FROM vetdonor_need WHERE email = $1", request.Email).Scan(&count)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check if email exists"})
+		return
+	}
+
+	if count > 0 {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "User with this email already marked as need"})
+		return
+	}
+
+	_, err = database.Db.Exec("INSERT INTO vetdonor_need(email, name) VALUES ($1, $2)", request.Email, request.Name)
 	if err != nil {
 		fmt.Println(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to move user's questionnaire"})

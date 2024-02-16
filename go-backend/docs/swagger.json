@@ -121,6 +121,122 @@
                 }
             }
         },
+        "/v1/get_all_clinic_cards": {
+            "get": {
+                "description": "Возвращает все карточеки клиник.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Все карточки клиник",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_all_user_cards": {
+            "get": {
+                "description": "Возвращает все карточки нуждающихся.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Все карточки юзеров",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_clinic_cards": {
+            "get": {
+                "description": "Возвращает 10 карточек клиник.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Первые 10 карточек клиник",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_user_cards": {
+            "get": {
+                "description": "Возвращает 10 карточек нуждающихся.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Первые 10 карточек юзеров",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/login": {
             "post": {
                 "description": "Авторизует пользователя с предоставленным email и паролем.",
@@ -154,6 +270,43 @@
                     },
                     "400": {
                         "description": "Не удалось авторизовать пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/mark": {
+            "post": {
+                "description": "Помещает анкету в отдельную базу нуждающихся",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Пометить анкету как нуждающегося",
+                "parameters": [
+                    {
+                        "description": "Запрос на перемещение анкеты пользователя в раздел нуждающихся",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное перемещение анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось переместить анкету",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -520,6 +673,17 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }

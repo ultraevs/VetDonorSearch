@@ -101,6 +101,13 @@ definitions:
     - name
     - password
     type: object
+  model.UserInfo:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -181,6 +188,82 @@ paths:
       summary: Восстановление
       tags:
       - Auth
+  /v1/get_all_clinic_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает все карточеки клиник.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Все карточки клиник
+      tags:
+      - Cards
+  /v1/get_all_user_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает все карточки нуждающихся.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Все карточки юзеров
+      tags:
+      - Cards
+  /v1/get_clinic_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает 10 карточек клиник.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Первые 10 карточек клиник
+      tags:
+      - Cards
+  /v1/get_user_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает 10 карточек нуждающихся.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Первые 10 карточек юзеров
+      tags:
+      - Cards
   /v1/login:
     post:
       consumes:
@@ -207,6 +290,30 @@ paths:
       summary: Логин
       tags:
       - Auth
+  /v1/mark:
+    post:
+      description: Помещает анкету в отдельную базу нуждающихся
+      parameters:
+      - description: Запрос на перемещение анкеты пользователя в раздел нуждающихся
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное перемещение анкеты
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось переместить анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Пометить анкету как нуждающегося
+      tags:
+      - User
   /v1/newpass:
     get:
       consumes:

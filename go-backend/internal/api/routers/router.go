@@ -34,4 +34,5 @@ func (router *Router) Setup() {
 	v1 := router.engine.Group("/v1")
 	router.AuthRoutes(v1)
 	router.UserRoutes(v1)
+	router.CardsRoutes(v1)
 }

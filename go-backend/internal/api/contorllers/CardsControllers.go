@@ -4,6 +4,7 @@ import (
 	"app/internal/database"
 	"app/internal/model"
 	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -18,7 +19,7 @@ import (
 // @Tags Cards
 // @Router /v1/get_user_cards [get]
 func GetUserCard(context *gin.Context) {
-	rows, err := database.Db.Query("SELECT * FROM vetdonor_need LIMIT 10")
+	rows, err := database.Db.Query("SELECT name, email FROM vetdonor_need LIMIT 10")
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
 		return
@@ -33,6 +34,7 @@ func GetUserCard(context *gin.Context) {
 		var user model.UserInfo
 		err := rows.Scan(&user.Name, &user.Email)
 		if err != nil {
+			fmt.Println(err)
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan rows"})
 			return
 		}
@@ -55,7 +57,82 @@ func GetUserCard(context *gin.Context) {
 // @Tags Cards
 // @Router /v1/get_clinic_cards [get]
 func GetClinicCard(context *gin.Context) {
-	rows, err := database.Db.Query("SELECT * FROM vetdonor_clinic LIMIT 10")
+	rows, err := database.Db.Query("SELECT name, email, address FROM vetdonor_clinic LIMIT 10")
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
+		return
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var clinics []model.ClinicInfo
+	for rows.Next() {
+		var clinic model.ClinicInfo
+		err := rows.Scan(&clinic.Name, &clinic.Email, &clinic.Address)
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan rows"})
+			return
+		}
+		clinics = append(clinics, clinic)
+	}
+	if err := rows.Err(); err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to iterate over rows"})
+		return
+	}
+	context.JSON(http.StatusOK, clinics)
+}
+
+// GetAllUserCard Все Карточки Юзеров.
+// @Summary Все карточки юзеров
+// @Description Возвращает все карточки нуждающихся.
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CodeResponse "Карточки получены"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить карточки"
+// @Tags Cards
+// @Router /v1/get_all_user_cards [get]
+func GetAllUserCard(context *gin.Context) {
+	rows, err := database.Db.Query("SELECT name, email FROM vetdonor_need")
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
+		return
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var users []model.UserInfo
+	for rows.Next() {
+		var user model.UserInfo
+		err := rows.Scan(&user.Name, &user.Email)
+		if err != nil {
+			fmt.Println(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan rows"})
+			return
+		}
+		users = append(users, user)
+	}
+	if err := rows.Err(); err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to iterate over rows"})
+		return
+	}
+	context.JSON(http.StatusOK, users)
+}
+
+// GetAllClinicCard Все Карточки Клиник.
+// @Summary Все карточки клиник
+// @Description Возвращает все карточеки клиник.
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CodeResponse "Карточки получены"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить карточки"
+// @Tags Cards
+// @Router /v1/get_all_clinic_cards [get]
+func GetAllClinicCard(context *gin.Context) {
+	rows, err := database.Db.Query("SELECT name, email, address FROM vetdonor_clinic")
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
 		return
