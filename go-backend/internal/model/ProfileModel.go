@@ -1,6 +1,8 @@
 package model
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type ClinicQuestionnaire struct {
 	BloodTypes map[string]interface{} `json:"bloodTypes" binding:"required"`
@@ -37,6 +39,29 @@ type CreateClinicQuestionnaire struct {
 	BloodTypes map[string]interface{} `json:"bloodTypes" binding:"required"`
 	WorkHours  string                 `json:"workHours" binding:"required"`
 	Contacts   string                 `json:"contacts" binding:"required"`
+}
+
+type CreateUserOtherInfo struct {
+	Email      string `json:"email"`
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Patronymic string `json:"patronymic"`
+	Age        string `json:"age"`
+	Gender     string `json:"gender"`
+	About      string `json:"about"`
+}
+
+type RequestUserOtherInfo struct {
+	Email string `json:"email"`
+}
+
+type ResponseUserOtherInfo struct {
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Patronymic string `json:"patronymic"`
+	Age        string `json:"age"`
+	Gender     string `json:"gender"`
+	About      string `json:"about"`
 }
 
 type QuestionnaireRequest struct {

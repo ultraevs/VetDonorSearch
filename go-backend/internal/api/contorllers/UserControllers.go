@@ -263,3 +263,55 @@ func MarkAsNeed(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, gin.H{"message": "User's questionnaire moved successfully"})
 }
+
+// CreateUserOtherInfo Создать анкету юзера.
+// @Summary Создать анкету юзера
+// @Description Создает анкету юзера для данных в профиле
+// @Consumes application/json
+// @Produce json
+// @Param request body model.CreateUserOtherInfo true "Запрос на создание анкеты пользователя"
+// @Success 200 {object} model.CodeResponse "Успешное создание анкеты"
+// @Failure 400 {object} model.ErrorResponse "Не удалось создать анкету"
+// @Tags User
+// @Router /v1/create_other_info [post]
+func CreateUserOtherInfo(context *gin.Context) {
+	var request model.CreateUserOtherInfo
+	if err := context.ShouldBindJSON(&request); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+
+	_, err := database.Db.Exec("INSERT INTO vetdonor_user_other_info(email, name, surname, patronymic, age, gender, about) VALUES ($1, $2, $3, $4, $5, $6, $7)", request.Email, request.Name, request.Surname, request.Patronymic, request.Age, request.Gender, request.About)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user's other info"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "User's other info created successfully"})
+}
+
+// GetUserOtherInfo Получить анкету юзера.
+// @Summary Получить анкету юзера
+// @Description Получает анкету пользователя для профиля
+// @Consumes application/json
+// @Produce json
+// @Param request body model.RequestUserOtherInfo true "Запрос на получение анкеты пользователя"
+// @Success 200 {object} model.CodeResponse "Успешно получена анкета"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить анкету"
+// @Tags User
+// @Router /v1/other_info [get]
+func GetUserOtherInfo(context *gin.Context) {
+	var request model.RequestUserOtherInfo
+	if err := context.ShouldBindJSON(&request); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+	var form model.ResponseUserOtherInfo
+	err := database.Db.QueryRow("SELECT name, surname, patronymic, age, gender, about FROM vetdonor_user_other_info WHERE email = $1", request.Email).Scan(&form.Name, &form.Surname, &form.Patronymic, &form.Age, &form.Gender, &form.About)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user's other info"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"name": form.Name, "surname": form.Surname, "patronymic": form.Patronymic, "age": form.Age, "gender": form.Gender, "about": form.About})
+}
