@@ -78,11 +78,9 @@ func UserQuestionnaire(context *gin.Context) {
 		isFind[0] = false
 	}
 	var user model.UserQuestionnaire
-	err = database.Db.QueryRow("SELECT city, surname, breed, petname, bloodtype, age FROM vetdonor_user_questionnaire WHERE email = $1", email).Scan(&user.City, &user.Surname, &user.Breed, &user.PetName, &user.BloodType, &user.Age)
+	err = database.Db.QueryRow("SELECT breed, petname, bloodtype, age FROM vetdonor_user_questionnaire WHERE email = $1", email).Scan(&user.Breed, &user.PetName, &user.BloodType, &user.Age)
 	if err == nil {
 		context.JSON(http.StatusOK, gin.H{
-			"City":      user.City,
-			"Surname":   user.Surname,
 			"Breed":     user.Breed,
 			"PetName":   user.PetName,
 			"BloodType": user.BloodType,
@@ -131,7 +129,7 @@ func CreateQuestionnaire(context *gin.Context) {
 		}
 
 		if existingUserID != 0 {
-			_, err := database.Db.Exec("UPDATE vetdonor_user_questionnaire SET city = $2, surname = $3, breed = $4, petname = $5, bloodtype = $6, age = $7 WHERE email = $1", user.Email, user.City, user.Surname, user.Breed, user.PetName, user.BloodType, user.Age)
+			_, err := database.Db.Exec("UPDATE vetdonor_user_questionnaire SET breed = $2, petname = $3, bloodtype = $4, age = $5 WHERE email = $1", user.Email, user.Breed, user.PetName, user.BloodType, user.Age)
 			if err != nil {
 				context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user's questionnaire"})
 				return
@@ -140,7 +138,7 @@ func CreateQuestionnaire(context *gin.Context) {
 			return
 		}
 
-		_, err = database.Db.Exec("INSERT INTO vetdonor_user_questionnaire (email, city, surname, breed, petname, bloodtype, age) VALUES ($1, $2, $3, $4, $5, $6, $7)", user.Email, user.City, user.Surname, user.Breed, user.PetName, user.BloodType, user.Age)
+		_, err = database.Db.Exec("INSERT INTO vetdonor_user_questionnaire (email, breed, petname, bloodtype, age) VALUES ($1, $2, $3, $4, $5)", user.Email, user.Breed, user.PetName, user.BloodType, user.Age)
 		if err != nil {
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user's questionnaire"})
 			return

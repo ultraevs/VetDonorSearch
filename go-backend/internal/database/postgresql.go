@@ -52,8 +52,6 @@ func ConnectDatabase() {
 	CREATE TABLE IF NOT EXISTS vetdonor_user_questionnaire (
 		id SERIAL PRIMARY KEY,
 		email VARCHAR(255) NOT NULL UNIQUE,
-		city VARCHAR(255) NOT NULL,
-		surname VARCHAR(255) NOT NULL,
 		breed VARCHAR(255) NOT NULL,
 		petname VARCHAR(255) NOT NULL,
 		bloodtype VARCHAR(255) NOT NULL,
@@ -82,7 +80,8 @@ func ConnectDatabase() {
 	    patronymic VARCHAR(255) NOT NULL UNIQUE,
 	    age VARCHAR(255) NOT NULL UNIQUE,
 	    gender VARCHAR(255) NOT NULL UNIQUE,
-	    about VARCHAR(255) NOT NULL UNIQUE
+	    about VARCHAR(255) NOT NULL UNIQUE,
+	    city VARCHAR(255) NOT NULL UNIQUE
 	);
 `
 	_, err = Db.Exec(createTablesQuery)

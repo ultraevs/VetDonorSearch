@@ -11,8 +11,6 @@ type ClinicQuestionnaire struct {
 }
 
 type UserQuestionnaire struct {
-	City      string `json:"city" binding:"required"`
-	Surname   string `json:"surname" binding:"required"`
 	Breed     string `json:"breed" binding:"required"`
 	PetName   string `json:"petName" binding:"required"`
 	BloodType string `json:"bloodType" binding:"required"`
@@ -26,8 +24,6 @@ type OneOfUserClinicQuestionnaireResponse struct {
 
 type CreateUserQuestionnaire struct {
 	Email     string `json:"email" binding:"required"`
-	City      string `json:"city" binding:"required"`
-	Surname   string `json:"surname" binding:"required"`
 	Breed     string `json:"breed" binding:"required"`
 	PetName   string `json:"petName" binding:"required"`
 	BloodType string `json:"bloodType" binding:"required"`
@@ -49,6 +45,7 @@ type CreateUserOtherInfo struct {
 	Age        string `json:"age"`
 	Gender     string `json:"gender"`
 	About      string `json:"about"`
+	City       string `json:"city"`
 }
 
 type RequestUserOtherInfo struct {
@@ -62,6 +59,7 @@ type ResponseUserOtherInfo struct {
 	Age        string `json:"age"`
 	Gender     string `json:"gender"`
 	About      string `json:"about"`
+	City       string `json:"city"`
 }
 
 type QuestionnaireRequest struct {
