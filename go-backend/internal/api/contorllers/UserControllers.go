@@ -33,7 +33,7 @@ func Profile(context *gin.Context) {
 				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find User"})
 				return
 			}
-			context.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email})
+			context.JSON(http.StatusOK, gin.H{"type": "user", "name": user.Name, "email": user.Email})
 			return
 		}
 	case "clinic":
@@ -44,7 +44,7 @@ func Profile(context *gin.Context) {
 				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find Clinic"})
 				return
 			}
-			context.JSON(http.StatusOK, gin.H{"name": clinic.Name, "email": clinic.Email, "address": clinic.Address})
+			context.JSON(http.StatusOK, gin.H{"type": "clinic", "name": clinic.Name, "email": clinic.Email, "address": clinic.Address})
 			return
 		}
 	}
