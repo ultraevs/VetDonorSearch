@@ -26,3 +26,14 @@ type NewPassword struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+type UserInfo struct {
+	Email string
+	Name  string
+}
+
+type ClinicInfo struct {
+	Email   string
+	Name    string
+	Address string
+}

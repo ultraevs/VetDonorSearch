@@ -45,6 +45,42 @@ func UserCreate(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":  body.Email,
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"type": "user",
+	})
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	context.Set("Authorization", tokenString)
+
+	sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
+
+	subject := "Создание аккаунта"
+	content := fmt.Sprintf(`
+	<h1>Уважаемый пользователь!</h1>
+	<p>Вы получили это письмо, потому что на сайте <a href="https://vetdonor.shmyaks.ru/>vetdonor</a> был зарегистрирован аккаунт с вашим email.</p>
+	<p>Если это были не вы - обратитесь в поддержку нашего сайта: smyakneksbimisis@gmail.com</p>
+	`)
+	to := []string{body.Email}
+	err = sender.SendEmail(subject, content, to, nil, nil)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
+		return
+	}
 	context.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
@@ -78,6 +114,42 @@ func ClinicCreate(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create Clinic"})
 		return
 	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":  body.Email,
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"type": "clinic",
+	})
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	context.Set("Authorization", tokenString)
+
+	sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
+
+	subject := "Создание аккаунта"
+	content := fmt.Sprintf(`
+	<h1>Уважаемый пользователь!</h1>
+	<p>Вы получили это письмо, потому что на сайте <a href="https://vetdonor.shmyaks.ru/>vetdonor</a> был зарегистрирован аккаунт с вашим email.</p>
+	<p>Если это были не вы - обратитесь в поддержку нашего сайта: smyakneksbimisis@gmail.com</p>
+	`)
+	to := []string{body.Email}
+	err = sender.SendEmail(subject, content, to, nil, nil)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
+		return
+	}
 	context.JSON(http.StatusOK, gin.H{"message": "Clinic created successfully"})
 }
 
@@ -102,38 +174,38 @@ func Login(context *gin.Context) {
 	}
 
 	var form model.LoginRequest
-	err := database.Db.QueryRow("SELECT email, password FROM vetdonor_users WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
+	isFind := [2]bool{true, true}
+	var formType string
+	err := database.Db.QueryRow("SELECT email, password FROM vetdonor_clinic WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
 	if err == nil {
 		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
 			return
 		}
-		context.JSON(http.StatusOK, gin.H{"user": form})
-		return
-	} else if !errors.Is(err, sql.ErrNoRows) {
-		fmt.Println(err)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-		return
-	}
+		formType = "clinic"
 
-	err = database.Db.QueryRow("SELECT email, password FROM vetdonor_clinic WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
-	if err == nil {
-		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
-			return
-		}
-		context.JSON(http.StatusOK, gin.H{"clinic": form})
-		return
 	} else if errors.Is(err, sql.ErrNoRows) {
-		context.JSON(http.StatusNotFound, gin.H{"error": "User is not found"})
+		isFind[0] = false
+	}
+
+	err = database.Db.QueryRow("SELECT email, password FROM vetdonor_users WHERE email = $1", body.Email).Scan(&form.Email, &form.Password)
+	if err == nil {
+		if err := bcrypt.CompareHashAndPassword([]byte(form.Password), []byte(body.Password)); err != nil {
+			context.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong password"})
+			return
+		}
+		formType = "user"
+	} else if errors.Is(err, sql.ErrNoRows) {
+		isFind[1] = false
+	}
+	if isFind[0] == false && isFind[1] == false {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "User/Clinic isn't founded"})
 		return
 	}
-	context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-	fmt.Println(form.Password, body.Password)
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": form.Email,
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"sub":  form.Email,
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"type": formType,
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 	if err != nil {
@@ -151,6 +223,26 @@ func Login(context *gin.Context) {
 	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
 	context.Set("Authorization", tokenString)
 	context.JSON(http.StatusOK, gin.H{"response": "success"})
+}
+
+// Logout Выход из аккаунта.
+// @Summary Выход из акканута
+// @Description Выполняет выход из аккаунта с сбросом cookie.
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CodeResponse "Выход выполнен"
+// @Failure 400 {object} model.ErrorResponse "Не удалось выполнить выход из аккаунта пользователя"
+// @Tags Auth
+// @Router /v1/logout [get]
+func Logout(context *gin.Context) {
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", "", -1, "/", domain, false, true)
+	context.JSON(http.StatusOK, gin.H{"logout": "success"})
 }
 
 type GmailSender struct {
@@ -212,7 +304,7 @@ func ForgotPassword(context *gin.Context) {
 	if os.Getenv("SETUP_TYPE") == "local" {
 		link = "http://localhost:8083/newpass?token=" + token
 	} else {
-		link = "http://vetdonor.shmyaks.ru/newpass?token=" + token
+		link = "https://vetdonor.shmyaks.ru/newpass?token=" + token
 	}
 	content := fmt.Sprintf(`
 	<h1>Здравствуйте, вы сделали запрос на восстановление пароля. Чтобы сменить пароль, перейдите по ссылке:</h1>
@@ -295,7 +387,7 @@ func PostNewPassword(context *gin.Context) {
 		return
 	}
 
-	_, err = database.Db.Exec(fmt.Sprintf("UPDATE %s SET password = $1 WHERE email = $2", tableName), string(hashPass), body.Email)
+	_, err = database.Db.Exec("UPDATE "+tableName+" SET password = $1 WHERE email = $2", string(hashPass), body.Email)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update password"})
 		return

@@ -22,6 +22,25 @@ definitions:
       message:
         type: string
     type: object
+  model.CreateUserOtherInfo:
+    properties:
+      about:
+        type: string
+      age:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
   model.ErrorResponse:
     properties:
       error:
@@ -54,6 +73,39 @@ definitions:
     - email
     - password
     type: object
+  model.OneOfUserClinicQuestionnaireResponse:
+    properties:
+      age:
+        type: string
+      bloodType:
+        type: string
+      bloodTypes:
+        additionalProperties: true
+        type: object
+      breed:
+        type: string
+      contacts:
+        type: string
+      petName:
+        type: string
+      workHours:
+        type: string
+    required:
+    - age
+    - bloodType
+    - bloodTypes
+    - breed
+    - contacts
+    - petName
+    - workHours
+    type: object
+  model.QuestionnaireRequest:
+    type: object
+  model.RequestUserOtherInfo:
+    properties:
+      email:
+        type: string
+    type: object
   model.UserCreateRequest:
     properties:
       email:
@@ -66,6 +118,13 @@ definitions:
     - email
     - name
     - password
+    type: object
+  model.UserInfo:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
     type: object
 info:
   contact: {}
@@ -97,6 +156,54 @@ paths:
       summary: Создать новоый аккаунт клиники
       tags:
       - Auth
+  /v1/create_other_info:
+    post:
+      description: Создает анкету юзера для данных в профиле
+      parameters:
+      - description: Запрос на создание анкеты пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserOtherInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное создание анкеты
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать анкету юзера
+      tags:
+      - User
+  /v1/create_questionnaire:
+    post:
+      description: Создает анкету пользователя или клиники
+      parameters:
+      - description: Запрос на создание анкеты пользователя или клиники
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.QuestionnaireRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное создание анкеты
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать анкету
+      tags:
+      - User
   /v1/forgot:
     post:
       consumes:
@@ -123,6 +230,82 @@ paths:
       summary: Восстановление
       tags:
       - Auth
+  /v1/get_all_clinic_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает все карточеки клиник.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Все карточки клиник
+      tags:
+      - Cards
+  /v1/get_all_user_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает все карточки нуждающихся.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Все карточки юзеров
+      tags:
+      - Cards
+  /v1/get_clinic_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает 10 карточек клиник.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Первые 10 карточек клиник
+      tags:
+      - Cards
+  /v1/get_user_cards:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает 10 карточек нуждающихся.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Карточки получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить карточки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Первые 10 карточек юзеров
+      tags:
+      - Cards
   /v1/login:
     post:
       consumes:
@@ -149,6 +332,49 @@ paths:
       summary: Логин
       tags:
       - Auth
+  /v1/logout:
+    get:
+      consumes:
+      - application/json
+      description: Выполняет выход из аккаунта с сбросом cookie.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Выход выполнен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось выполнить выход из аккаунта пользователя
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Выход из акканута
+      tags:
+      - Auth
+  /v1/mark:
+    post:
+      description: Помещает анкету в отдельную базу нуждающихся
+      parameters:
+      - description: Запрос на перемещение анкеты пользователя в раздел нуждающихся
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное перемещение анкеты
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось переместить анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Пометить анкету как нуждающегося
+      tags:
+      - User
   /v1/newpass:
     get:
       consumes:
@@ -199,6 +425,93 @@ paths:
       summary: Добавление нового пароля в БД
       tags:
       - Auth
+  /v1/other_info:
+    get:
+      description: Получает анкету пользователя для профиля
+      parameters:
+      - description: Запрос на получение анкеты пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestUserOtherInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получена анкета
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить анкету юзера
+      tags:
+      - User
+  /v1/profile:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает профиль пользователя.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Профиль получен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить профиль
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Профиль
+      tags:
+      - User
+  /v1/profile/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает профиль другого пользователя.
+      parameters:
+      - description: user's email key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Профиль получен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить профиль
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Чужой Профиль
+      tags:
+      - User
+  /v1/questionnaire:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает анкету пользователя для старнички "profile".
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Анкета получена
+          schema:
+            $ref: '#/definitions/model.OneOfUserClinicQuestionnaireResponse'
+        "400":
+          description: Не удалось получить анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Анкета
+      tags:
+      - User
   /v1/user_create:
     post:
       consumes:

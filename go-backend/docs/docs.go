@@ -55,6 +55,80 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/create_other_info": {
+            "post": {
+                "description": "Создает анкету юзера для данных в профиле",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Создать анкету юзера",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание анкеты пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateUserOtherInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное создание анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/create_questionnaire": {
+            "post": {
+                "description": "Создает анкету пользователя или клиники",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Создать анкету",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание анкеты пользователя или клиники",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.QuestionnaireRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное создание анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/forgot": {
             "post": {
                 "description": "Инициирует восстановление пароля по email.",
@@ -95,6 +169,122 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/get_all_clinic_cards": {
+            "get": {
+                "description": "Возвращает все карточеки клиник.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Все карточки клиник",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_all_user_cards": {
+            "get": {
+                "description": "Возвращает все карточки нуждающихся.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Все карточки юзеров",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_clinic_cards": {
+            "get": {
+                "description": "Возвращает 10 карточек клиник.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Первые 10 карточек клиник",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_user_cards": {
+            "get": {
+                "description": "Возвращает 10 карточек нуждающихся.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Первые 10 карточек юзеров",
+                "responses": {
+                    "200": {
+                        "description": "Карточки получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/login": {
             "post": {
                 "description": "Авторизует пользователя с предоставленным email и паролем.",
@@ -128,6 +318,72 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось авторизовать пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/logout": {
+            "get": {
+                "description": "Выполняет выход из аккаунта с сбросом cookie.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Выход из акканута",
+                "responses": {
+                    "200": {
+                        "description": "Выход выполнен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось выполнить выход из аккаунта пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/mark": {
+            "post": {
+                "description": "Помещает анкету в отдельную базу нуждающихся",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Пометить анкету как нуждающегося",
+                "parameters": [
+                    {
+                        "description": "Запрос на перемещение анкеты пользователя в раздел нуждающихся",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное перемещение анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось переместить анкету",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -211,6 +467,139 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/other_info": {
+            "get": {
+                "description": "Получает анкету пользователя для профиля",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получить анкету юзера",
+                "parameters": [
+                    {
+                        "description": "Запрос на получение анкеты пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestUserOtherInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получена анкета",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/profile": {
+            "get": {
+                "description": "Возвращает профиль пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Профиль",
+                "responses": {
+                    "200": {
+                        "description": "Профиль получен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить профиль",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/profile/{key}": {
+            "get": {
+                "description": "Возвращает профиль другого пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Чужой Профиль",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user's email key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Профиль получен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить профиль",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/questionnaire": {
+            "get": {
+                "description": "Возвращает анкету пользователя для старнички \"profile\".",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Анкета",
+                "responses": {
+                    "200": {
+                        "description": "Анкета получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.OneOfUserClinicQuestionnaireResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user_create": {
             "post": {
                 "description": "Создает нового пользователя с предоставленным email, паролем и именем.",
@@ -287,6 +676,35 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateUserOtherInfo": {
+            "type": "object",
+            "properties": {
+                "about": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -336,6 +754,53 @@ const docTemplate = `{
                 }
             }
         },
+        "model.OneOfUserClinicQuestionnaireResponse": {
+            "type": "object",
+            "required": [
+                "age",
+                "bloodType",
+                "bloodTypes",
+                "breed",
+                "contacts",
+                "petName",
+                "workHours"
+            ],
+            "properties": {
+                "age": {
+                    "type": "string"
+                },
+                "bloodType": {
+                    "type": "string"
+                },
+                "bloodTypes": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "breed": {
+                    "type": "string"
+                },
+                "contacts": {
+                    "type": "string"
+                },
+                "petName": {
+                    "type": "string"
+                },
+                "workHours": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.QuestionnaireRequest": {
+            "type": "object"
+        },
+        "model.RequestUserOtherInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserCreateRequest": {
             "type": "object",
             "required": [
@@ -351,6 +816,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
