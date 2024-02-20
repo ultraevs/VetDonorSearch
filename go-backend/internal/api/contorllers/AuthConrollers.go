@@ -45,6 +45,42 @@ func UserCreate(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":  body.Email,
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"type": "user",
+	})
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	context.Set("Authorization", tokenString)
+
+	sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
+
+	subject := "Создание аккаунта"
+	content := fmt.Sprintf(`
+	<h1>Уважаемый пользователь!</h1>
+	<p>Вы получили это письмо, потому что на сайте <a href="https://vetdonor.shmyaks.ru/>vetdonor</a> был зарегистрирован аккаунт с вашим email.</p>
+	<p>Если это были не вы - обратитесь в поддержку нашего сайта: smyakneksbimisis@gmail.com</p>
+	`)
+	to := []string{body.Email}
+	err = sender.SendEmail(subject, content, to, nil, nil)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
+		return
+	}
 	context.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
@@ -76,6 +112,42 @@ func ClinicCreate(context *gin.Context) {
 	_, err = database.Db.Exec("INSERT INTO vetdonor_clinic (email, password, name, address) VALUES ($1, $2, $3, $4)", body.Email, string(hashPass), body.Name, body.Address)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create Clinic"})
+		return
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":  body.Email,
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"type": "clinic",
+	})
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	context.Set("Authorization", tokenString)
+
+	sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
+
+	subject := "Создание аккаунта"
+	content := fmt.Sprintf(`
+	<h1>Уважаемый пользователь!</h1>
+	<p>Вы получили это письмо, потому что на сайте <a href="https://vetdonor.shmyaks.ru/>vetdonor</a> был зарегистрирован аккаунт с вашим email.</p>
+	<p>Если это были не вы - обратитесь в поддержку нашего сайта: smyakneksbimisis@gmail.com</p>
+	`)
+	to := []string{body.Email}
+	err = sender.SendEmail(subject, content, to, nil, nil)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
 		return
 	}
 	context.JSON(http.StatusOK, gin.H{"message": "Clinic created successfully"})
@@ -151,6 +223,26 @@ func Login(context *gin.Context) {
 	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
 	context.Set("Authorization", tokenString)
 	context.JSON(http.StatusOK, gin.H{"response": "success"})
+}
+
+// Logout Выход из аккаунта.
+// @Summary Выход из акканута
+// @Description Выполняет выход из аккаунта с сбросом cookie.
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CodeResponse "Выход выполнен"
+// @Failure 400 {object} model.ErrorResponse "Не удалось выполнить выход из аккаунта пользователя"
+// @Tags Auth
+// @Router /v1/logout [get]
+func Logout(context *gin.Context) {
+	var domain string
+	if os.Getenv("SETUP_TYPE") == "local" {
+		domain = "localhost"
+	} else {
+		domain = "vetdonor.shmyaks.ru"
+	}
+	context.SetCookie("Authorization", "", -1, "/", domain, false, true)
+	context.JSON(http.StatusOK, gin.H{"logout": "success"})
 }
 
 type GmailSender struct {

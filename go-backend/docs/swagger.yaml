@@ -22,6 +22,25 @@ definitions:
       message:
         type: string
     type: object
+  model.CreateUserOtherInfo:
+    properties:
+      about:
+        type: string
+      age:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
   model.ErrorResponse:
     properties:
       error:
@@ -65,13 +84,9 @@ definitions:
         type: object
       breed:
         type: string
-      city:
-        type: string
       contacts:
         type: string
       petName:
-        type: string
-      surname:
         type: string
       workHours:
         type: string
@@ -80,13 +95,16 @@ definitions:
     - bloodType
     - bloodTypes
     - breed
-    - city
     - contacts
     - petName
-    - surname
     - workHours
     type: object
   model.QuestionnaireRequest:
+    type: object
+  model.RequestUserOtherInfo:
+    properties:
+      email:
+        type: string
     type: object
   model.UserCreateRequest:
     properties:
@@ -138,6 +156,30 @@ paths:
       summary: Создать новоый аккаунт клиники
       tags:
       - Auth
+  /v1/create_other_info:
+    post:
+      description: Создает анкету юзера для данных в профиле
+      parameters:
+      - description: Запрос на создание анкеты пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserOtherInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное создание анкеты
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось создать анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Создать анкету юзера
+      tags:
+      - User
   /v1/create_questionnaire:
     post:
       description: Создает анкету пользователя или клиники
@@ -290,6 +332,25 @@ paths:
       summary: Логин
       tags:
       - Auth
+  /v1/logout:
+    get:
+      consumes:
+      - application/json
+      description: Выполняет выход из аккаунта с сбросом cookie.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Выход выполнен
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось выполнить выход из аккаунта пользователя
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Выход из акканута
+      tags:
+      - Auth
   /v1/mark:
     post:
       description: Помещает анкету в отдельную базу нуждающихся
@@ -364,6 +425,30 @@ paths:
       summary: Добавление нового пароля в БД
       tags:
       - Auth
+  /v1/other_info:
+    get:
+      description: Получает анкету пользователя для профиля
+      parameters:
+      - description: Запрос на получение анкеты пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestUserOtherInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получена анкета
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить анкету юзера
+      tags:
+      - User
   /v1/profile:
     get:
       consumes:

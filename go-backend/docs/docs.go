@@ -55,6 +55,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/create_other_info": {
+            "post": {
+                "description": "Создает анкету юзера для данных в профиле",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Создать анкету юзера",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание анкеты пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateUserOtherInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное создание анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/create_questionnaire": {
             "post": {
                 "description": "Создает анкету пользователя или клиники",
@@ -288,6 +325,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/logout": {
+            "get": {
+                "description": "Выполняет выход из аккаунта с сбросом cookie.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Выход из акканута",
+                "responses": {
+                    "200": {
+                        "description": "Выход выполнен",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось выполнить выход из аккаунта пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/mark": {
             "post": {
                 "description": "Помещает анкету в отдельную базу нуждающихся",
@@ -394,6 +460,43 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось сохранить пароль",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/other_info": {
+            "get": {
+                "description": "Получает анкету пользователя для профиля",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получить анкету юзера",
+                "parameters": [
+                    {
+                        "description": "Запрос на получение анкеты пользователя",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestUserOtherInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получена анкета",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить анкету",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -573,6 +676,35 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateUserOtherInfo": {
+            "type": "object",
+            "properties": {
+                "about": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -629,10 +761,8 @@ const docTemplate = `{
                 "bloodType",
                 "bloodTypes",
                 "breed",
-                "city",
                 "contacts",
                 "petName",
-                "surname",
                 "workHours"
             ],
             "properties": {
@@ -649,16 +779,10 @@ const docTemplate = `{
                 "breed": {
                     "type": "string"
                 },
-                "city": {
-                    "type": "string"
-                },
                 "contacts": {
                     "type": "string"
                 },
                 "petName": {
-                    "type": "string"
-                },
-                "surname": {
                     "type": "string"
                 },
                 "workHours": {
@@ -668,6 +792,14 @@ const docTemplate = `{
         },
         "model.QuestionnaireRequest": {
             "type": "object"
+        },
+        "model.RequestUserOtherInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
         },
         "model.UserCreateRequest": {
             "type": "object",
