@@ -63,6 +63,11 @@ definitions:
     - email
     - password
     type: object
+  model.MessageBody:
+    properties:
+      message_text:
+        type: string
+    type: object
   model.NewPassword:
     properties:
       email:
@@ -423,6 +428,31 @@ paths:
       summary: Статистика конкретного юзера
       tags:
       - Stats
+  /v1/image/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает фото справки пользователя.
+      parameters:
+      - description: image id
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Фото получено
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить фото
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Фото справки
+      tags:
+      - Photo
   /v1/login:
     post:
       consumes:
@@ -492,6 +522,32 @@ paths:
       summary: Пометить анкету как нуждающегося
       tags:
       - User
+  /v1/message:
+    post:
+      consumes:
+      - application/json
+      description: Сообщение ассистенту.
+      parameters:
+      - description: Сообщение ассистенту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.MessageBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сообщене получено
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить сообщение
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Сообщение ассистенту
+      tags:
+      - Assistant
   /v1/newpass:
     get:
       consumes:

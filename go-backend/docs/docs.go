@@ -444,6 +444,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/image/{key}": {
+            "get": {
+                "description": "Возвращает фото справки пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Photo"
+                ],
+                "summary": "Фото справки",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "image id",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Фото получено",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить фото",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/login": {
             "post": {
                 "description": "Авторизует пользователя с предоставленным email и паролем.",
@@ -543,6 +581,46 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось переместить анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/message": {
+            "post": {
+                "description": "Сообщение ассистенту.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assistant"
+                ],
+                "summary": "Сообщение ассистенту",
+                "parameters": [
+                    {
+                        "description": "Сообщение ассистенту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.MessageBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Сообщене получено",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить сообщение",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -934,6 +1012,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.MessageBody": {
+            "type": "object",
+            "properties": {
+                "message_text": {
                     "type": "string"
                 }
             }

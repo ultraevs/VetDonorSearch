@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -125,7 +127,8 @@ func CheckDonation(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
 		return
 	}
-	filePath := "/uploads/" + filename
+	filenameWithoutExtension := strings.TrimSuffix(filename, ".png")
+	filePath := "https://vetdonor.shmyaks.ru/image/" + filenameWithoutExtension
 
 	err = SaveFilePathInDatabase(email, filePath, donationType)
 	if err != nil {
@@ -215,4 +218,28 @@ func DeleteDonationApplication(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Donation application deleted successfully"})
+}
+
+// GetImage Фото справки.
+// @Summary Фото справки
+// @Description Возвращает фото справки пользователя.
+// @Accept json
+// @Produce json
+// @Param key path string true "image id"
+// @Success 200 {object} model.CodeResponse "Фото получено"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить фото"
+// @Tags Photo
+// @Router /v1/image/{key} [get]
+func GetImage(context *gin.Context) {
+	key := context.Param("key")
+	imagePath := "uploads/" + key + ".png"
+
+	imageData, err := ioutil.ReadFile(imagePath)
+	if err != nil {
+		context.String(http.StatusInternalServerError, "Ошибка при чтении изображения")
+		return
+	}
+
+	context.Header("Content-Type", http.DetectContentType(imageData))
+	context.Data(http.StatusOK, "image", imageData)
 }
