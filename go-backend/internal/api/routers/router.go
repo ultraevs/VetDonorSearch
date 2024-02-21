@@ -36,4 +36,5 @@ func (router *Router) Setup() {
 	router.UserRoutes(v1)
 	router.CardsRoutes(v1)
 	router.StatRouters(v1)
+	router.DonationRouters(v1)
 }

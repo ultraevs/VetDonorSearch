@@ -4,6 +4,51 @@
         "contact": {}
     },
     "paths": {
+        "/v1/check_donation": {
+            "post": {
+                "description": "Загрузка справки пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Загрузить справку конкретного юзера",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Адрес электронной почты пользователя",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Фотография пользователя",
+                        "name": "photo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Фотография успешно загружена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось загрузить фотографию",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/clinic_create": {
             "post": {
                 "description": "Создает новый аккаунт клиники с предоставленным email, паролем, именем и адрессом.",

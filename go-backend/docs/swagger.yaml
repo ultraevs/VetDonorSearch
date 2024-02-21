@@ -140,6 +140,36 @@ definitions:
 info:
   contact: {}
 paths:
+  /v1/check_donation:
+    post:
+      consumes:
+      - application/json
+      description: Загрузка справки пользователя.
+      parameters:
+      - description: Адрес электронной почты пользователя
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Фотография пользователя
+        in: formData
+        name: photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Фотография успешно загружена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось загрузить фотографию
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Загрузить справку конкретного юзера
+      tags:
+      - Stats
   /v1/clinic_create:
     post:
       consumes:

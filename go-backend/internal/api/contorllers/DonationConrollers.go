@@ -8,6 +8,9 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"path/filepath"
+	"strconv"
+	"time"
 )
 
 // GetUserStat Статистика Юзера.
@@ -79,4 +82,54 @@ func UpdateUserStat(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, currentStats)
+}
+
+// CheckDonation Загрузить справку.
+// @Summary Загрузить справку конкретного юзера
+// @Description Загрузка справки пользователя.
+// @Accept json
+// @Produce json
+// @Param email formData string true "Адрес электронной почты пользователя"
+// @Param photo formData file true "Фотография пользователя"
+// @Success 200 {object} model.CodeResponse "Фотография успешно загружена"
+// @Failure 400 {object} model.ErrorResponse "Не удалось загрузить фотографию"
+// @Tags Stats
+// @Router /v1/check_donation [post]
+func CheckDonation(context *gin.Context) {
+	file, err := context.FormFile("photo")
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	email := context.PostForm("email")
+
+	photo, err := file.Open()
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Failed to open photo"})
+		return
+	}
+	defer photo.Close()
+
+	filename := strconv.FormatInt(time.Now().Unix(), 10) + filepath.Ext(file.Filename)
+
+	if err := context.SaveUploadedFile(file, "../uploads/"+filename); err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+		return
+	}
+	filePath := "../uploads/" + filename
+
+	err = SaveFilePathInDatabase(email, filePath)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file path in database"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Photo uploaded successfully"})
+}
+
+func SaveFilePathInDatabase(email, filepath string) error {
+	_, err := database.Db.Exec("INSERT INTO vetdonor_donation (email, photo_path) VALUES ($1, $2)", email, filepath)
+	return err
 }
