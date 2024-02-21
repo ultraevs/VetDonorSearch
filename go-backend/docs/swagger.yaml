@@ -101,6 +101,11 @@ definitions:
     type: object
   model.QuestionnaireRequest:
     type: object
+  model.RequestBody:
+    properties:
+      id:
+        type: integer
+    type: object
   model.RequestUpdateStat:
     properties:
       donationType:
@@ -246,6 +251,32 @@ paths:
       summary: Создать анкету
       tags:
       - User
+  /v1/delete_application:
+    post:
+      consumes:
+      - application/json
+      description: Удаляет запись по указанному айди.
+      parameters:
+      - description: Запрос на удаление заявки
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Заявка успешно удалена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось удалить заявку
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Удалить выполненную заявку из БД
+      tags:
+      - Stats
   /v1/forgot:
     post:
       consumes:
@@ -291,6 +322,25 @@ paths:
       summary: Все карточки клиник
       tags:
       - Cards
+  /v1/get_all_donations:
+    get:
+      consumes:
+      - application/json
+      description: Получает все справки о новых донациях юзеров.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Заявки успешно получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить заявки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить все справки о донациях юзеров
+      tags:
+      - Stats
   /v1/get_all_user_cards:
     get:
       consumes:

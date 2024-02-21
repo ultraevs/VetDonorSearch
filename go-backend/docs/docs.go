@@ -181,6 +181,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/delete_application": {
+            "post": {
+                "description": "Удаляет запись по указанному айди.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Удалить выполненную заявку из БД",
+                "parameters": [
+                    {
+                        "description": "Запрос на удаление заявки",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Заявка успешно удалена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось удалить заявку",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/forgot": {
             "post": {
                 "description": "Инициирует восстановление пароля по email.",
@@ -243,6 +283,35 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_all_donations": {
+            "get": {
+                "description": "Получает все справки о новых донациях юзеров.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Получить все справки о донациях юзеров",
+                "responses": {
+                    "200": {
+                        "description": "Заявки успешно получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить заявки",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -922,6 +991,14 @@ const docTemplate = `{
         },
         "model.QuestionnaireRequest": {
             "type": "object"
+        },
+        "model.RequestBody": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
         },
         "model.RequestUpdateStat": {
             "type": "object",
