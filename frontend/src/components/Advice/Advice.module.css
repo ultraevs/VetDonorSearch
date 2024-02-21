@@ -1,7 +1,11 @@
+.advice_block {
+  margin-top: 100px;
+}
+
 .advice_wrapper {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .advice_item {

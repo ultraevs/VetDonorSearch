@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Layout.module.css"
 
-import Logo from "../../assets/icon/logo.svg"
+import Logo from "../../assets/img/LOGO.svg"
 import Cat from "../../assets/img/Cat.png"
 
 const Layout = ({ children }) => {

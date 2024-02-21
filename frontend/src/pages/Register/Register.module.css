@@ -34,7 +34,7 @@
 }
 
 .choose_item.active {
-  background: #b32121;
+  background: #2749fc;
   color: white;
 }
 
@@ -54,11 +54,12 @@
 }
 
 .enter_data p {
-  color: white;
+  color: #1f1f1f;
   font-weight: 500;
 }
 
 .enter_data input {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.02), 0 9px 9px 0 rgba(0, 0, 0, 0.01), 0 20px 12px 0 rgba(0, 0, 0, 0.01), 0 36px 14px 0 rgba(0, 0, 0, 0), 0 56px 16px 0 rgba(0, 0, 0, 0);
   width: 100%;
   border-radius: 10px;
   padding: 15px 14px;
@@ -75,11 +76,11 @@
 
 .forgot_password p {
   font-weight: 400;
-  color: white;
+  color: #1f1f1f;
 }
 
 .forgot_password p span {
-  color: white;
+  color: #1f1f1f;
   text-decoration: underline;
 }
 
@@ -88,7 +89,7 @@
 }
 
 .enter button {
-  background: #b32121;
+  background: #2749fc;
   outline: none;
   border: none;
   cursor: pointer;

@@ -6,9 +6,9 @@ import Logo from "../../assets/img/LOGO.svg"
 
 const Header = () => {
   return (
-    <div className={styles.header_block}>
+    <div className={styles.header}>
       <div className={styles.logo}>
-        <img src={Logo} alt="Логотип" />
+        <img src={Logo} alt="Logo" />
       </div>
       <NavBar />
     </div>

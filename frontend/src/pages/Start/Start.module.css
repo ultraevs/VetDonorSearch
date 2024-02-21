@@ -6,27 +6,25 @@
 }
 
 .main_info h1 {
-  font-weight: 900;
-  font-size: 32px;
-  color: #fff;
+  font-weight: 500;
+  font-size: 42px;
+  color: #1f1f1f;
 }
 
 .main_info p {
   font-weight: 400;
   font-size: 24px;
-  color: #fff;
+  color: #1f1f1f;
 }
 
 .main_info button {
   cursor: pointer;
-  background: #b32121;
-  border-radius: 10px;
-  padding: 22px 18px;
-  width: 224px;
-  height: 73px;
+  background: #2749fc;
+  border-radius: 4px;
+  padding: 8px 18px;
   outline: none;
   border: none;
-  font-weight: 400;
-  font-size: 20px;
+  font-weight: 100;
+  font-size: 22px;
   color: #fff;
 }

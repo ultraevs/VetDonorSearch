@@ -6,6 +6,7 @@ import Profile from "./pages/Profile/Profile"
 import Main from './pages/Main/Main'
 
 import { Route, Routes } from 'react-router-dom'
+import Where from './pages/Where/Where'
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Route path='/auth/register' element={ <Register />}/>
       <Route path='/Profile' element={ <Profile />}/>
       <Route path='/Main' element={ <Main />}/>
+      <Route path='/Where' element={ <Where />}/>
     </Routes>
   )
 }

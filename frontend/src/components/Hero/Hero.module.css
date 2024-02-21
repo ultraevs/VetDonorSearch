@@ -1,4 +1,5 @@
 .hero_block {
+  margin-top: 50px;
   position: relative;
 }
 
@@ -14,6 +15,8 @@
 }
 
 .hero_info {
+  max-width: 1440px;
+  margin: 0px auto;
   display: flex;
   flex-direction: column;
   gap: 142px;

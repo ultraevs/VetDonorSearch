@@ -1,7 +1,11 @@
+.needDonor_block {
+  margin-top: 100px;
+}
+
 .needDonor_wrapper {
-    display: flex;
-    flex-direction: row;
-    gap: 38px;
+  display: flex;
+  flex-direction: row;
+  gap: 38px;
 }
 
 .needDonor_item {
@@ -63,7 +67,7 @@
 }
 
 .item_info {
-    margin-top: 12px;
+  margin-top: 12px;
 }
 
 .item_info_name p:first-child {
@@ -103,13 +107,13 @@
 }
 
 .item_info {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .item_info_found {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

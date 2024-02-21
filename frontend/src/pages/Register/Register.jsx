@@ -31,7 +31,7 @@ const Register = () => {
     try {
       const response = await createUser(name, mail, password);
       if (response.success) {
-        navigate("/Profile");
+        navigate("/Main");
       } else {
         alert("Ошибка: " + response.error)
       }
@@ -126,7 +126,7 @@ const Register = () => {
           <div className={styles.enter_data_password}>
             <p>Пароль</p>
             <input
-              type="text"
+              type="password"
               placeholder="Введите пароль"
               value={inputPassword}
               onChange={(event) => setInputPassword(event.target.value)}

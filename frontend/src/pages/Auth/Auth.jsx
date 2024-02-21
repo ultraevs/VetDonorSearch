@@ -31,7 +31,7 @@ const Auth = () => {
       const response = await checkLoginForm(mail, password);
       console.log(response);
       if (response.success) {
-        navigate("/Profile")
+        navigate("/Main")
       } else {
         alert("Ошибка: " + response.error)
       }
@@ -77,7 +77,7 @@ const Auth = () => {
           <div className={styles.enter_data_password}>
             <p>Пароль</p>
             <input
-              type="text"
+              type="password"
               placeholder="Введите пароль"
               value={inputPassword}
               onChange={(event) => setInputPassword(event.target.value)}
