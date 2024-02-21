@@ -37,6 +37,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "Тип донации пользователя",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
                         "type": "file",
                         "description": "Фотография пользователя",
                         "name": "photo",
@@ -919,17 +926,11 @@ const docTemplate = `{
         "model.RequestUpdateStat": {
             "type": "object",
             "properties": {
-                "blood": {
-                    "type": "integer"
+                "donationType": {
+                    "type": "string"
                 },
                 "email": {
                     "type": "string"
-                },
-                "plasma": {
-                    "type": "integer"
-                },
-                "platelets": {
-                    "type": "integer"
                 }
             }
         },

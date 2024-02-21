@@ -7,8 +7,6 @@ type ResponseStat struct {
 }
 
 type RequestUpdateStat struct {
-	Email     string `json:"email"`
-	Blood     int    `json:"blood"`
-	Plasma    int    `json:"plasma"`
-	Platelets int    `json:"platelets"`
+	DonationType string `json:"donationType"`
+	Email        string `json:"email"`
 }

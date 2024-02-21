@@ -103,14 +103,10 @@ definitions:
     type: object
   model.RequestUpdateStat:
     properties:
-      blood:
-        type: integer
+      donationType:
+        type: string
       email:
         type: string
-      plasma:
-        type: integer
-      platelets:
-        type: integer
     type: object
   model.RequestUserOtherInfo:
     properties:
@@ -149,6 +145,11 @@ paths:
       - description: Адрес электронной почты пользователя
         in: formData
         name: email
+        required: true
+        type: string
+      - description: Тип донации пользователя
+        in: formData
+        name: type
         required: true
         type: string
       - description: Фотография пользователя

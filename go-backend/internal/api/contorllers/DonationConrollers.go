@@ -51,9 +51,8 @@ func UpdateUserStat(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
 		return
 	}
-
-	var existingUser model.RequestUpdateStat
-	err := database.Db.QueryRow("SELECT email, blood, plasma, platelets FROM vetdonor_donation_stat WHERE email = $1", request.Email).Scan(&existingUser.Email, &existingUser.Blood, &existingUser.Plasma, &existingUser.Platelets)
+	var email string
+	err := database.Db.QueryRow("SELECT email FROM vetdonor_donation_stat WHERE email = $1", request.Email).Scan(&email)
 	switch {
 	case errors.Is(err, sql.ErrNoRows):
 		_, insertErr := database.Db.Exec("INSERT INTO vetdonor_donation_stat (email, blood, plasma, platelets) VALUES ($1, $2, $3, $4)", request.Email, 0, 0, 0)
@@ -67,9 +66,10 @@ func UpdateUserStat(context *gin.Context) {
 		return
 	}
 
-	query := "UPDATE vetdonor_donation_stat SET blood = blood + $1, plasma = plasma + $2, platelets = platelets + $3 WHERE email = $4"
-	_, updateErr := database.Db.Exec(query, request.Blood, request.Plasma, request.Platelets, request.Email)
+	query := fmt.Sprintf("UPDATE vetdonor_donation_stat SET %s = %s + 1 WHERE email = $1", request.DonationType, request.DonationType)
+	_, updateErr := database.Db.Exec(query, request.Email)
 	if updateErr != nil {
+		fmt.Println(updateErr)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating data"})
 		return
 	}
@@ -90,6 +90,7 @@ func UpdateUserStat(context *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param email formData string true "Адрес электронной почты пользователя"
+// @Param type formData string true "Тип донации пользователя"
 // @Param photo formData file true "Фотография пользователя"
 // @Success 200 {object} model.CodeResponse "Фотография успешно загружена"
 // @Failure 400 {object} model.ErrorResponse "Не удалось загрузить фотографию"
@@ -103,6 +104,7 @@ func CheckDonation(context *gin.Context) {
 	}
 
 	email := context.PostForm("email")
+	donationType := context.PostForm("type")
 
 	photo, err := file.Open()
 	if err != nil {
@@ -119,7 +121,7 @@ func CheckDonation(context *gin.Context) {
 	}
 	filePath := "../uploads/" + filename
 
-	err = SaveFilePathInDatabase(email, filePath)
+	err = SaveFilePathInDatabase(email, filePath, donationType)
 	if err != nil {
 		fmt.Println(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file path in database"})
@@ -129,7 +131,7 @@ func CheckDonation(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"message": "Photo uploaded successfully"})
 }
 
-func SaveFilePathInDatabase(email, filepath string) error {
-	_, err := database.Db.Exec("INSERT INTO vetdonor_donation (email, photo_path) VALUES ($1, $2)", email, filepath)
+func SaveFilePathInDatabase(email string, filepath string, dontaionType string) error {
+	_, err := database.Db.Exec("INSERT INTO vetdonor_donation (email, photo_path, donationType) VALUES ($1, $2, $3)", email, filepath, dontaionType)
 	return err
 }
