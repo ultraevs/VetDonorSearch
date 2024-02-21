@@ -101,6 +101,17 @@ definitions:
     type: object
   model.QuestionnaireRequest:
     type: object
+  model.RequestUpdateStat:
+    properties:
+      blood:
+        type: integer
+      email:
+        type: string
+      plasma:
+        type: integer
+      platelets:
+        type: integer
+    type: object
   model.RequestUserOtherInfo:
     properties:
       email:
@@ -306,6 +317,31 @@ paths:
       summary: Первые 10 карточек юзеров
       tags:
       - Cards
+  /v1/get_user_stats/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Статистика донаций пользователя.
+      parameters:
+      - description: user's email key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Статистика получена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить статистику
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Статистика конкретного юзера
+      tags:
+      - Stats
   /v1/login:
     post:
       consumes:
@@ -512,6 +548,32 @@ paths:
       summary: Анкета
       tags:
       - User
+  /v1/update_user_stats:
+    put:
+      consumes:
+      - application/json
+      description: Статистика донаций пользователя.
+      parameters:
+      - description: Запрос на получение статистики юзера
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestUpdateStat'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Статистика получена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить статистику
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Обновить статистику конкретного юзера
+      tags:
+      - Stats
   /v1/user_create:
     post:
       consumes:

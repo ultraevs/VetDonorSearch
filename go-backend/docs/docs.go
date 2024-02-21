@@ -285,6 +285,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/get_user_stats/{key}": {
+            "get": {
+                "description": "Статистика донаций пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Статистика конкретного юзера",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user's email key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Статистика получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить статистику",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/login": {
             "post": {
                 "description": "Авторизует пользователя с предоставленным email и паролем.",
@@ -600,6 +638,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/update_user_stats": {
+            "put": {
+                "description": "Статистика донаций пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Обновить статистику конкретного юзера",
+                "parameters": [
+                    {
+                        "description": "Запрос на получение статистики юзера",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestUpdateStat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Статистика получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить статистику",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user_create": {
             "post": {
                 "description": "Создает нового пользователя с предоставленным email, паролем и именем.",
@@ -792,6 +870,23 @@ const docTemplate = `{
         },
         "model.QuestionnaireRequest": {
             "type": "object"
+        },
+        "model.RequestUpdateStat": {
+            "type": "object",
+            "properties": {
+                "blood": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "plasma": {
+                    "type": "integer"
+                },
+                "platelets": {
+                    "type": "integer"
+                }
+            }
         },
         "model.RequestUserOtherInfo": {
             "type": "object",
