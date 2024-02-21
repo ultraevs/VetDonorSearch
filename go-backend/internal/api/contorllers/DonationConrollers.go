@@ -7,12 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"image"
+	"image/png"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
-	"path/filepath"
+	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -117,18 +118,36 @@ func CheckDonation(context *gin.Context) {
 	defer func(photo multipart.File) {
 		err := photo.Close()
 		if err != nil {
-
+			return
 		}
 	}(photo)
 
-	filename := strconv.FormatInt(time.Now().Unix(), 10) + filepath.Ext(file.Filename)
-
-	if err := context.SaveUploadedFile(file, "uploads/"+filename); err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+	img, _, err := image.Decode(photo)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Failed to decode image"})
 		return
 	}
-	filenameWithoutExtension := strings.TrimSuffix(filename, ".png")
-	filePath := "https://vetdonor.shmyaks.ru/image/" + filenameWithoutExtension
+
+	filename := strconv.FormatInt(time.Now().Unix(), 10) + ".png"
+	out, err := os.Create("uploads/" + filename)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create file"})
+		return
+	}
+	defer func(out *os.File) {
+		err := out.Close()
+		if err != nil {
+			return
+		}
+	}(out)
+
+	err = png.Encode(out, img)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to encode image as PNG"})
+		return
+	}
+
+	filePath := "https://vetdonor.shmyaks.ru/v1/image/" + filename
 
 	err = SaveFilePathInDatabase(email, filePath, donationType)
 	if err != nil {
