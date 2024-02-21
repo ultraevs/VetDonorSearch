@@ -1,0 +1,34 @@
+.start_page {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.page_left {
+  padding: 20px 0px 0px 110px;
+  background: #237851;
+  display: flex;
+  flex-direction: column;
+  /* gap: 178px; */
+}
+
+.page_right {
+  background: #edb102;
+}
+
+.page_right {
+  position: relative;
+}
+
+.img_cat {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 570px;
+  height: 817px;
+}
+
+.img_cat img {
+  width: 100%;
+  height: auto;
+}

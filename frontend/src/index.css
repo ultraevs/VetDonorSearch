@@ -1,0 +1,18 @@
+@font-face {
+  font-family: Founder;
+  src: url(../src/assets/fonts/founder.eot); /* IE9 Compat Modes */
+  src: url(../src/assets/fonts/founder.woff) format('woff'), /* Pretty Modern Browsers */
+       /* url(../src/assets/fonts/founder.woff2) format('woff2'), Super Modern Browsers */
+       /* url(../src/assets/fonts/founder.ttf)  format('truetype'), Safari, Android, iOS */
+       url(../src/assets/fonts/founder.svg) format('svg'); /* Legacy iOS */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Founder, sans-serif;
+}

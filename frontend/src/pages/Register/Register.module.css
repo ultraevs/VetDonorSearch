@@ -1,0 +1,102 @@
+.main_info {
+  margin-top: 91px;
+  width: 500px;
+}
+
+.choose {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f1f1f1;
+  border-radius: 10px;
+  padding: 5px 7px;
+}
+
+.choose_item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 7px auto;
+  width: 100%;
+  height: 40px;
+  color: #888;
+  font-weight: 400;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.choose_item a p {
+  color: #888;
+}
+
+.choose_item.active {
+  background: #b32121;
+  color: white;
+}
+
+.enter_data {
+  margin-top: 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.enter_data_mail,
+.enter_data_password,
+.enter_data_name {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.enter_data p {
+  color: white;
+  font-weight: 500;
+}
+
+.enter_data input {
+  width: 100%;
+  border-radius: 10px;
+  padding: 15px 14px;
+  border: none;
+  outline: none;
+  color: #888;
+  font-weight: 300;
+}
+
+.forgot_password {
+  margin-top: 8px;
+  text-align: end;
+}
+
+.forgot_password p {
+  font-weight: 400;
+  color: white;
+}
+
+.forgot_password p span {
+  color: white;
+  text-decoration: underline;
+}
+
+.enter {
+  margin-top: 88px;
+}
+
+.enter button {
+  background: #b32121;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  padding: 8px 188px;
+  color: white;
+  font-weight: 400;
+  font-size: 16px;
+}
