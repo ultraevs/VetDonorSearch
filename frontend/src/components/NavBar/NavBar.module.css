@@ -1,0 +1,24 @@
+.navbar {
+  background: #e6eaff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 0.38rem;
+  padding: 0.5rem 0.62rem;
+}
+
+.navbar_item {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 1.38rem;
+  text-decoration: none;
+  color: #474747;
+  height: fit-content;
+}
+
+.active {
+  background: #2749fc;
+  color: #fff;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1.12rem;
+}

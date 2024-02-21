@@ -1,0 +1,115 @@
+.needDonor_wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 38px;
+}
+
+.needDonor_item {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  background: #e6eaff;
+  width: 290px;
+  border-radius: 16px;
+}
+
+.item_date {
+  position: absolute;
+  top: -2%;
+  right: -4%;
+  border-radius: 999px;
+  width: 72px;
+  height: 72px;
+  background: #f9fbff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.item_date p {
+  font-weight: 600;
+  font-size: 24px;
+  color: #1f1f1f;
+}
+
+.item_date p:last-child {
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.item_type {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12.5px;
+}
+
+.item_type_text p {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.item_photo {
+  margin-top: 30px;
+  border-radius: 12px;
+  background: #f2f4ff;
+  text-align: center;
+}
+
+.item_photo img {
+  margin-top: -20px;
+}
+
+.item_info {
+    margin-top: 12px;
+}
+
+.item_info_name p:first-child {
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.item_info_name p:last-child {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.item_info_adress {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.item_info_adress_text p {
+  font-weight: 500;
+  font-size: 16px;
+  color: #060814;
+}
+
+.item_info_found_person {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+
+.item_info_found p {
+  font-weight: 500;
+  font-size: 16px;
+  color: #060814;
+}
+
+.item_info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.item_info_found {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
