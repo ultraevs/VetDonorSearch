@@ -1,9 +1,7 @@
 .header_block {
-  max-width: 1440px;
+  max-width: 1250px;
   margin: 0 auto;
   z-index: 1000;
-  /* position: sticky;
-  top: 0; */
   padding: 40px 0px;
   display: flex;
   justify-content: space-between;

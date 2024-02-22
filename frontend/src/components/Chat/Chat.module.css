@@ -1,11 +1,11 @@
 .chat {
+  height: 108px;
   position: fixed;
   bottom: 20px;
   right: 40px;
   z-index: 1001;
   border-radius: 12px 12px 0 12px;
   overflow: hidden;
-  transition: all 0.5s ease-in-out;
 }
 
 .chat_open_button {
@@ -16,6 +16,7 @@
 
 .chat.open {
   height: 520px;
+  transition: height 1s ease-in-out;
 }
 
 .chat_container {
@@ -71,17 +72,24 @@
 }
 
 .chat_messages {
-  height: 400px;
+  height: 390px;
   margin: 10px;
   overflow-y: auto;
   margin-bottom: 10px;
 }
 
 .chat_message {
-  padding: 5px;
-  margin-bottom: 5px;
+  margin-top: 30px;
+}
+
+.chat_message:first-child {
+  margin-top: 10px;
+}
+
+.chat_message span {
+  padding: 10px;
   background-color: #eee;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .chat_form {

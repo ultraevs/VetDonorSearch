@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Chat.module.css";
 
-import classNames from "class-names";
-
 import Helper from "../../assets/img/helper.svg";
 import Send from "../../assets/icon/send.png";
 import Close from "../../assets/icon/close.png";
@@ -63,7 +61,7 @@ const Chat = () => {
           </div>
           <div className={styles.chat_messages}>
             {messages.map((message, index) => (
-              <div key={index}>{message}</div>
+              <div className={styles.chat_message} key={index}><span>{message}</span></div>
             ))}
           </div>
           <form onSubmit={handleFormSubmit}>

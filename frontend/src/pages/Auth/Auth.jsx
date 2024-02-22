@@ -89,7 +89,7 @@ const Auth = () => {
         </div>
         <div className={styles.enter}>
           <Link>
-            <button
+            <button className="button"
               onClick={() => buttonClick(inputMail, inputPassword)}
             >
               Войти

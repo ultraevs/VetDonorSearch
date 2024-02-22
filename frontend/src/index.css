@@ -16,7 +16,17 @@ body {
   color: #1f1f1f;
 }
 
+.button {
+  font-family: "Montserrat", sans-serif;
+}
+
 .container {
-  max-width: 1440px;
+  max-width: 1250px;
   margin: 0 auto;
+}
+
+@media (max-width: 1350px) {
+  .container {
+    margin: 0 60px;
+  }
 }
