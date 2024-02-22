@@ -15,6 +15,58 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/check_donation": {
+            "post": {
+                "description": "Загрузка справки пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Загрузить справку конкретного юзера",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Адрес электронной почты пользователя",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Тип донации пользователя",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Фотография пользователя",
+                        "name": "photo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Фотография успешно загружена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось загрузить фотографию",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/clinic_create": {
             "post": {
                 "description": "Создает новый аккаунт клиники с предоставленным email, паролем, именем и адрессом.",
@@ -129,6 +181,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/delete_application": {
+            "post": {
+                "description": "Удаляет запись по указанному айди.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Удалить выполненную заявку из БД",
+                "parameters": [
+                    {
+                        "description": "Запрос на удаление заявки",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Заявка успешно удалена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось удалить заявку",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/forgot": {
             "post": {
                 "description": "Инициирует восстановление пароля по email.",
@@ -191,6 +283,35 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_all_donations": {
+            "get": {
+                "description": "Получает все справки о новых донациях юзеров.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Получить все справки о донациях юзеров",
+                "responses": {
+                    "200": {
+                        "description": "Заявки успешно получены",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить заявки",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -278,6 +399,82 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_user_stats/{key}": {
+            "get": {
+                "description": "Статистика донаций пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Статистика конкретного юзера",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user's email key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Статистика получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить статистику",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/image/{key}": {
+            "get": {
+                "description": "Возвращает фото справки пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Photo"
+                ],
+                "summary": "Фото справки",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "image id",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Фото получено",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить фото",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -384,6 +581,46 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось переместить анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/message": {
+            "post": {
+                "description": "Сообщение ассистенту.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assistant"
+                ],
+                "summary": "Сообщение ассистенту",
+                "parameters": [
+                    {
+                        "description": "Сообщение ассистенту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.MessageBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Сообщене получено",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить сообщение",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -600,6 +837,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/update_user_stats": {
+            "put": {
+                "description": "Статистика донаций пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Обновить статистику конкретного юзера",
+                "parameters": [
+                    {
+                        "description": "Запрос на получение статистики юзера",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestUpdateStat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Статистика получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить статистику",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user_create": {
             "post": {
                 "description": "Создает нового пользователя с предоставленным email, паролем и именем.",
@@ -739,6 +1016,14 @@ const docTemplate = `{
                 }
             }
         },
+        "model.MessageBody": {
+            "type": "object",
+            "properties": {
+                "message_text": {
+                    "type": "string"
+                }
+            }
+        },
         "model.NewPassword": {
             "type": "object",
             "required": [
@@ -792,6 +1077,25 @@ const docTemplate = `{
         },
         "model.QuestionnaireRequest": {
             "type": "object"
+        },
+        "model.RequestBody": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RequestUpdateStat": {
+            "type": "object",
+            "properties": {
+                "donationType": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
         },
         "model.RequestUserOtherInfo": {
             "type": "object",

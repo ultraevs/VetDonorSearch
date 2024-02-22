@@ -63,6 +63,11 @@ definitions:
     - email
     - password
     type: object
+  model.MessageBody:
+    properties:
+      message_text:
+        type: string
+    type: object
   model.NewPassword:
     properties:
       email:
@@ -101,6 +106,18 @@ definitions:
     type: object
   model.QuestionnaireRequest:
     type: object
+  model.RequestBody:
+    properties:
+      id:
+        type: integer
+    type: object
+  model.RequestUpdateStat:
+    properties:
+      donationType:
+        type: string
+      email:
+        type: string
+    type: object
   model.RequestUserOtherInfo:
     properties:
       email:
@@ -129,6 +146,41 @@ definitions:
 info:
   contact: {}
 paths:
+  /v1/check_donation:
+    post:
+      consumes:
+      - application/json
+      description: Загрузка справки пользователя.
+      parameters:
+      - description: Адрес электронной почты пользователя
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Тип донации пользователя
+        in: formData
+        name: type
+        required: true
+        type: string
+      - description: Фотография пользователя
+        in: formData
+        name: photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Фотография успешно загружена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось загрузить фотографию
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Загрузить справку конкретного юзера
+      tags:
+      - Stats
   /v1/clinic_create:
     post:
       consumes:
@@ -204,6 +256,32 @@ paths:
       summary: Создать анкету
       tags:
       - User
+  /v1/delete_application:
+    post:
+      consumes:
+      - application/json
+      description: Удаляет запись по указанному айди.
+      parameters:
+      - description: Запрос на удаление заявки
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Заявка успешно удалена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось удалить заявку
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Удалить выполненную заявку из БД
+      tags:
+      - Stats
   /v1/forgot:
     post:
       consumes:
@@ -249,6 +327,25 @@ paths:
       summary: Все карточки клиник
       tags:
       - Cards
+  /v1/get_all_donations:
+    get:
+      consumes:
+      - application/json
+      description: Получает все справки о новых донациях юзеров.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Заявки успешно получены
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить заявки
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить все справки о донациях юзеров
+      tags:
+      - Stats
   /v1/get_all_user_cards:
     get:
       consumes:
@@ -306,6 +403,56 @@ paths:
       summary: Первые 10 карточек юзеров
       tags:
       - Cards
+  /v1/get_user_stats/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Статистика донаций пользователя.
+      parameters:
+      - description: user's email key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Статистика получена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить статистику
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Статистика конкретного юзера
+      tags:
+      - Stats
+  /v1/image/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает фото справки пользователя.
+      parameters:
+      - description: image id
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Фото получено
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить фото
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Фото справки
+      tags:
+      - Photo
   /v1/login:
     post:
       consumes:
@@ -375,6 +522,32 @@ paths:
       summary: Пометить анкету как нуждающегося
       tags:
       - User
+  /v1/message:
+    post:
+      consumes:
+      - application/json
+      description: Сообщение ассистенту.
+      parameters:
+      - description: Сообщение ассистенту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.MessageBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сообщене получено
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить сообщение
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Сообщение ассистенту
+      tags:
+      - Assistant
   /v1/newpass:
     get:
       consumes:
@@ -512,6 +685,32 @@ paths:
       summary: Анкета
       tags:
       - User
+  /v1/update_user_stats:
+    put:
+      consumes:
+      - application/json
+      description: Статистика донаций пользователя.
+      parameters:
+      - description: Запрос на получение статистики юзера
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestUpdateStat'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Статистика получена
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить статистику
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Обновить статистику конкретного юзера
+      tags:
+      - Stats
   /v1/user_create:
     post:
       consumes:

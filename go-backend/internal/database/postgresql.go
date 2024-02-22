@@ -83,6 +83,20 @@ func ConnectDatabase() {
 	    about VARCHAR(255) NOT NULL,
 	    city VARCHAR(255) NOT NULL
 	);
+	CREATE TABLE IF NOT EXISTS vetdonor_donation_stat (
+	  	id SERIAL PRIMARY KEY,
+		email VARCHAR(255) NOT NULL UNIQUE,
+    	blood INTEGER,
+    	plasma INTEGER,
+    	platelets INTEGER
+	);
+
+	CREATE TABLE IF NOT EXISTS vetdonor_donation (
+	    id SERIAL PRIMARY KEY,
+	    email VARCHAR(255) NOT NULL,
+	    photo_path VARCHAR(255) NOT NULL,
+	    donationType VARCHAR(255) NOT NULL
+	)
 `
 	_, err = Db.Exec(createTablesQuery)
 	if err != nil {

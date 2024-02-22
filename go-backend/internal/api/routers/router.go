@@ -2,6 +2,7 @@ package router
 
 import (
 	_ "app/docs"
+	controller "app/internal/api/contorllers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -30,9 +31,12 @@ func (router *Router) Setup() {
 		AllowCredentials: true,
 	}))
 	router.engine.GET("v1/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
+	router.engine.GET("v1/image/:key", controller.GetImage)
 	v1 := router.engine.Group("/v1")
 	router.AuthRoutes(v1)
 	router.UserRoutes(v1)
 	router.CardsRoutes(v1)
+	router.StatRouters(v1)
+	router.DonationRouters(v1)
+	router.AssistantRoutes(v1)
 }
