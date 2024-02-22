@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Montserrat, sans-serif;
+  background: #f9fbff;
+}
+
+.subtitle {
+  margin-bottom: 42px;
+  font-weight: 500;
+  font-size: 30px;
+  color: #1f1f1f;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}

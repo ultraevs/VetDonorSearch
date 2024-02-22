@@ -1,0 +1,43 @@
+.advice_block {
+  margin-top: 100px;
+}
+
+.advice_wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.advice_item {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.02), 0 9px 9px 0 rgba(0, 0, 0, 0.01),
+    0 20px 12px 0 rgba(0, 0, 0, 0.01), 0 36px 14px 0 rgba(0, 0, 0, 0),
+    0 56px 16px 0 rgba(0, 0, 0, 0);
+  background: #fff;
+  padding: 14px 50px 14px 24px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item_person {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.person_info_name p {
+  font-weight: 500;
+  font-size: 22px;
+}
+
+.person_info_city p {
+  font-size: 18px;
+  color: #474747;
+}
+
+.item_text p {
+  font-weight: 300;
+  font-size: 18px;
+}
