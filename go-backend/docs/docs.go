@@ -156,12 +156,12 @@ const docTemplate = `{
                 "summary": "Создать анкету",
                 "parameters": [
                     {
-                        "description": "Запрос на создание анкеты пользователя или клиники",
+                        "description": "Запрос на создание анкеты клиники",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.QuestionnaireRequest"
+                            "$ref": "#/definitions/model.CreateClinicQuestionnaire"
                         }
                     }
                 ],
@@ -370,6 +370,43 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_questionnaire": {
+            "post": {
+                "description": "Получить анкету клиники",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получить анкету клиники",
+                "parameters": [
+                    {
+                        "description": "Запрос на получение анкеты клиники",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestQuestionnaire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получена анкета",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить анкету",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -808,9 +845,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/questionnaire": {
+        "/v1/top_list": {
             "get": {
-                "description": "Возвращает анкету пользователя для старнички \"profile\".",
+                "description": "Топ лист из статистик юзеров.",
                 "consumes": [
                     "application/json"
                 ],
@@ -818,18 +855,18 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Stats"
                 ],
-                "summary": "Анкета",
+                "summary": "Топ лист из статистик юзеров",
                 "responses": {
                     "200": {
-                        "description": "Анкета получена",
+                        "description": "Статистика получена",
                         "schema": {
-                            "$ref": "#/definitions/model.OneOfUserClinicQuestionnaireResponse"
+                            "$ref": "#/definitions/model.CodeResponse"
                         }
                     },
                     "400": {
-                        "description": "Не удалось получить анкету",
+                        "description": "Не удалось получить статистику",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -953,6 +990,37 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateClinicQuestionnaire": {
+            "type": "object",
+            "required": [
+                "contacts",
+                "email",
+                "workHours"
+            ],
+            "properties": {
+                "BloodTypesIncluded": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "bloodTypesNotIncluded": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "contacts": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "workHours": {
+                    "type": "string"
+                }
+            }
+        },
         "model.CreateUserOtherInfo": {
             "type": "object",
             "properties": {
@@ -1039,50 +1107,19 @@ const docTemplate = `{
                 }
             }
         },
-        "model.OneOfUserClinicQuestionnaireResponse": {
-            "type": "object",
-            "required": [
-                "age",
-                "bloodType",
-                "bloodTypes",
-                "breed",
-                "contacts",
-                "petName",
-                "workHours"
-            ],
-            "properties": {
-                "age": {
-                    "type": "string"
-                },
-                "bloodType": {
-                    "type": "string"
-                },
-                "bloodTypes": {
-                    "type": "object",
-                    "additionalProperties": true
-                },
-                "breed": {
-                    "type": "string"
-                },
-                "contacts": {
-                    "type": "string"
-                },
-                "petName": {
-                    "type": "string"
-                },
-                "workHours": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.QuestionnaireRequest": {
-            "type": "object"
-        },
         "model.RequestBody": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.RequestQuestionnaire": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string"
                 }
             }
         },

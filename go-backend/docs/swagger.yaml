@@ -22,6 +22,27 @@ definitions:
       message:
         type: string
     type: object
+  model.CreateClinicQuestionnaire:
+    properties:
+      BloodTypesIncluded:
+        items:
+          type: string
+        type: array
+      bloodTypesNotIncluded:
+        items:
+          type: string
+        type: array
+      contacts:
+        type: string
+      email:
+        type: string
+      workHours:
+        type: string
+    required:
+    - contacts
+    - email
+    - workHours
+    type: object
   model.CreateUserOtherInfo:
     properties:
       about:
@@ -78,38 +99,15 @@ definitions:
     - email
     - password
     type: object
-  model.OneOfUserClinicQuestionnaireResponse:
-    properties:
-      age:
-        type: string
-      bloodType:
-        type: string
-      bloodTypes:
-        additionalProperties: true
-        type: object
-      breed:
-        type: string
-      contacts:
-        type: string
-      petName:
-        type: string
-      workHours:
-        type: string
-    required:
-    - age
-    - bloodType
-    - bloodTypes
-    - breed
-    - contacts
-    - petName
-    - workHours
-    type: object
-  model.QuestionnaireRequest:
-    type: object
   model.RequestBody:
     properties:
       id:
         type: integer
+    type: object
+  model.RequestQuestionnaire:
+    properties:
+      Email:
+        type: string
     type: object
   model.RequestUpdateStat:
     properties:
@@ -236,12 +234,12 @@ paths:
     post:
       description: Создает анкету пользователя или клиники
       parameters:
-      - description: Запрос на создание анкеты пользователя или клиники
+      - description: Запрос на создание анкеты клиники
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.QuestionnaireRequest'
+          $ref: '#/definitions/model.CreateClinicQuestionnaire'
       produces:
       - application/json
       responses:
@@ -384,6 +382,30 @@ paths:
       summary: Первые 10 карточек клиник
       tags:
       - Cards
+  /v1/get_questionnaire:
+    post:
+      description: Получить анкету клиники
+      parameters:
+      - description: Запрос на получение анкеты клиники
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestQuestionnaire'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получена анкета
+          schema:
+            $ref: '#/definitions/model.CodeResponse'
+        "400":
+          description: Не удалось получить анкету
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить анкету клиники
+      tags:
+      - User
   /v1/get_user_cards:
     get:
       consumes:
@@ -666,25 +688,25 @@ paths:
       summary: Чужой Профиль
       tags:
       - User
-  /v1/questionnaire:
+  /v1/top_list:
     get:
       consumes:
       - application/json
-      description: Возвращает анкету пользователя для старнички "profile".
+      description: Топ лист из статистик юзеров.
       produces:
       - application/json
       responses:
         "200":
-          description: Анкета получена
+          description: Статистика получена
           schema:
-            $ref: '#/definitions/model.OneOfUserClinicQuestionnaireResponse'
+            $ref: '#/definitions/model.CodeResponse'
         "400":
-          description: Не удалось получить анкету
+          description: Не удалось получить статистику
           schema:
             $ref: '#/definitions/model.ErrorResponse'
-      summary: Анкета
+      summary: Топ лист из статистик юзеров
       tags:
-      - User
+      - Stats
   /v1/update_user_stats:
     put:
       consumes:

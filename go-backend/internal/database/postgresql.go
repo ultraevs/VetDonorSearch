@@ -47,8 +47,13 @@ func ConnectDatabase() {
 		email VARCHAR(255) NOT NULL UNIQUE,
 		password VARCHAR(255) NOT NULL,
 		name VARCHAR(255) NOT NULL,
-		address VARCHAR(255) NOT NULL
+		address VARCHAR(255) NOT NULL,
+		bloodtypesincluded VARCHAR(255)[],
+	    bloodtypesnotincluded VARCHAR(255)[],
+	    workhours VARCHAR(255) NOT NULL,
+	    contacts VARCHAR(255) NOT NULL
 	);
+
 	CREATE TABLE IF NOT EXISTS vetdonor_user_questionnaire (
 		id SERIAL PRIMARY KEY,
 		email VARCHAR(255) NOT NULL UNIQUE,
@@ -56,14 +61,6 @@ func ConnectDatabase() {
 		petname VARCHAR(255) NOT NULL,
 		bloodtype VARCHAR(255) NOT NULL,
 		age VARCHAR(255) NOT NULL
-	);
-
-	CREATE TABLE IF NOT EXISTS vetdonor_clinic_questionnaire (
-		id SERIAL PRIMARY KEY,
-		email VARCHAR(255) NOT NULL UNIQUE,
-		bloodtypes JSONB  NOT NULL,
-		workhours VARCHAR(255) NOT NULL,
-		contacts VARCHAR(255) NOT NULL
 	);
 
 	CREATE TABLE IF NOT EXISTS vetdonor_need (

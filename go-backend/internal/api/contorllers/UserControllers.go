@@ -4,11 +4,12 @@ import (
 	"app/internal/database"
 	"app/internal/model"
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 	"net/http"
+	"strings"
 )
 
 // Profile Профиль пользователя.
@@ -51,147 +52,81 @@ func Profile(context *gin.Context) {
 
 }
 
-// UserQuestionnaire Анкета пользователя.
-// @Summary Анкета
-// @Description Возвращает анкету пользователя для старнички "profile".
-// @Accept json
-// @Produce json
-// @Success 200 {object} model.OneOfUserClinicQuestionnaireResponse "Анкета получена"
-// @Failure 400 {object} model.ErrorResponse "Не удалось получить анкету"
-// @Tags User
-// @Router /v1/questionnaire [get]
-func UserQuestionnaire(context *gin.Context) {
-	email := context.MustGet("Email").(string)
-	var clinic model.ClinicQuestionnaire
-	isFind := [2]bool{true, true}
-	var bloodTypesJSON []byte
-	err := database.Db.QueryRow("SELECT bloodtypes, workhours, contacts FROM vetdonor_clinic_questionnaire WHERE email = $1", email).Scan(&bloodTypesJSON, &clinic.WorkHours, &clinic.Contacts)
-	err = json.Unmarshal(bloodTypesJSON, &clinic.BloodTypes)
-	if err == nil {
-		context.JSON(http.StatusOK, gin.H{
-			"BloodTypes": clinic.BloodTypes,
-			"WorkHours":  clinic.WorkHours,
-			"Contacts":   clinic.Contacts,
-		})
-		return
-	} else if errors.Is(err, sql.ErrNoRows) {
-		isFind[0] = false
-	}
-	var user model.UserQuestionnaire
-	err = database.Db.QueryRow("SELECT breed, petname, bloodtype, age FROM vetdonor_user_questionnaire WHERE email = $1", email).Scan(&user.Breed, &user.PetName, &user.BloodType, &user.Age)
-	if err == nil {
-		context.JSON(http.StatusOK, gin.H{
-			"Breed":     user.Breed,
-			"PetName":   user.PetName,
-			"BloodType": user.BloodType,
-			"Age":       user.Age,
-		})
-		return
-	} else if errors.Is(err, sql.ErrNoRows) {
-		isFind[1] = false
-	}
-	if isFind[0] == false && isFind[1] == false {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Questionnaire isn't founded"})
-		return
-	}
-}
-
 // CreateQuestionnaire Создать анкету.
 // @Summary Создать анкету
 // @Description Создает анкету пользователя или клиники
 // @Consumes application/json
 // @Produce json
-// @Param request body model.QuestionnaireRequest true "Запрос на создание анкеты пользователя или клиники"
+// @Param request body model.CreateClinicQuestionnaire true "Запрос на создание анкеты клиники"
 // @Success 200 {object} model.CodeResponse "Успешное создание анкеты"
 // @Failure 400 {object} model.ErrorResponse "Не удалось создать анкету"
 // @Tags User
 // @Router /v1/create_questionnaire [post]
 func CreateQuestionnaire(context *gin.Context) {
-	var request model.QuestionnaireRequest
+	var clinic model.CreateClinicQuestionnaire
+	if err := context.ShouldBindJSON(&clinic); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+
+	var existingClinicID int
+	err := database.Db.QueryRow("SELECT id FROM vetdonor_clinic WHERE email = $1", clinic.Email).Scan(&existingClinicID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
+		return
+	}
+
+	if existingClinicID != 0 {
+		_, err := database.Db.Exec("UPDATE vetdonor_clinic SET bloodtypesincluded = $2, workhours = $3, contacts = $4, bloodtypesnotincluded = $5 WHERE email = $1", clinic.Email, pq.Array(clinic.BloodTypesIncluded), clinic.WorkHours, clinic.Contacts, pq.Array(clinic.BloodTypesNotIncluded))
+		if err != nil {
+			fmt.Println(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update clinic's questionnaire"})
+			return
+		}
+		context.JSON(http.StatusOK, gin.H{"message": "Clinic's questionnaire updated successfully"})
+		return
+	}
+
+	//_, err = database.Db.Exec("INSERT INTO vetdonor_clinic (email, bloodtypesincluded, workhours, contacts, bloodtypesnotincluded) VALUES ($1, $2, $3, $4, $5)", clinic.Email, pq.Array(clinic.BloodTypesIncluded), clinic.WorkHours, clinic.Contacts, pq.Array(clinic.BloodTypesNotIncluded))
+	//if err != nil {
+	//	fmt.Println(err)
+	//	context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create clinic's questionnaire"})
+	//	return
+	//}
+	context.JSON(http.StatusOK, gin.H{"message": "Clinic's questionnaire created successfully"})
+}
+
+// GetQuestionnaire Получить анкету клиники.
+// @Summary Получить анкету клиники
+// @Description Получить анкету клиники
+// @Consumes application/json
+// @Produce json
+// @Param request body model.RequestQuestionnaire true "Запрос на получение анкеты клиники"
+// @Success 200 {object} model.CodeResponse "Успешно получена анкета"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить анкету"
+// @Tags User
+// @Router /v1/get_questionnaire [post]
+func GetQuestionnaire(context *gin.Context) {
+	var request model.RequestQuestionnaire
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
 		return
 	}
 
-	switch request.Type {
-	case "user":
-		var user model.CreateUserQuestionnaire
-		if err := json.Unmarshal(request.Data, &user); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"error": "Can't parse the user data"})
-			return
-		}
-
-		var existingUserID int
-		err := database.Db.QueryRow("SELECT id FROM vetdonor_user_questionnaire WHERE email = $1", user.Email).Scan(&existingUserID)
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
-			return
-		}
-
-		if existingUserID != 0 {
-			_, err := database.Db.Exec("UPDATE vetdonor_user_questionnaire SET breed = $2, petname = $3, bloodtype = $4, age = $5 WHERE email = $1", user.Email, user.Breed, user.PetName, user.BloodType, user.Age)
-			if err != nil {
-				context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user's questionnaire"})
-				return
-			}
-			context.JSON(http.StatusOK, gin.H{"message": "User's questionnaire updated successfully"})
-			return
-		}
-
-		_, err = database.Db.Exec("INSERT INTO vetdonor_user_questionnaire (email, breed, petname, bloodtype, age) VALUES ($1, $2, $3, $4, $5)", user.Email, user.Breed, user.PetName, user.BloodType, user.Age)
-		if err != nil {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user's questionnaire"})
-			return
-		}
-		context.JSON(http.StatusOK, gin.H{"message": "User's questionnaire created successfully"})
-	case "clinic":
-		var clinic model.CreateClinicQuestionnaire
-		if err := json.Unmarshal(request.Data, &clinic); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"error": "Can't parse the clinic data"})
-			return
-		}
-
-		var existingClinicID int
-		err := database.Db.QueryRow("SELECT id FROM vetdonor_clinic_questionnaire WHERE email = $1", clinic.Email).Scan(&existingClinicID)
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
-			return
-		}
-
-		if existingClinicID != 0 {
-			bloodTypesJSON, err := json.Marshal(clinic.BloodTypes)
-			if err != nil {
-				fmt.Println(err)
-				context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create clinic's questionnaire"})
-				return
-			}
-
-			_, err = database.Db.Exec("UPDATE vetdonor_clinic_questionnaire SET bloodtypes = $2, workhours = $3, contacts = $4 WHERE email = $1", clinic.Email, string(bloodTypesJSON), clinic.WorkHours, clinic.Contacts)
-			if err != nil {
-				fmt.Println(err)
-				context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update clinic's questionnaire"})
-				return
-			}
-			context.JSON(http.StatusOK, gin.H{"message": "Clinic's questionnaire updated successfully"})
-			return
-		}
-
-		bloodTypesJSON, err := json.Marshal(clinic.BloodTypes)
-		if err != nil {
-			fmt.Println(err)
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create clinic's questionnaire"})
-			return
-		}
-		_, err = database.Db.Exec("INSERT INTO vetdonor_clinic_questionnaire (email, bloodtypes, workhours, contacts) VALUES ($1, $2, $3, $4)", clinic.Email, string(bloodTypesJSON), clinic.WorkHours, clinic.Contacts)
-		if err != nil {
-			fmt.Println(err)
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create clinic's questionnaire"})
-			return
-		}
-		context.JSON(http.StatusOK, gin.H{"message": "Clinic's questionnaire created successfully"})
-	default:
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid questionnaire type"})
+	var info model.ClinicQuestionnaire
+	var bloodTypesIncludedStr, bloodTypesNotIncludedStr string
+	err := database.Db.QueryRow("SELECT email, name, address, array_to_string(bloodtypesincluded, ','), array_to_string(bloodtypesnotincluded, ','), workhours, contacts FROM vetdonor_clinic WHERE email = $1", request.Email).Scan(&info.Email, &info.Name, &info.Address, &bloodTypesIncludedStr, &bloodTypesNotIncludedStr, &info.WorkHours, &info.Contacts)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get clinic's questionnaire"})
+		return
 	}
+
+	info.BloodTypesIncluded = strings.Split(bloodTypesIncludedStr, ",")
+	info.BloodTypesNotIncluded = strings.Split(bloodTypesNotIncludedStr, ",")
+
+	context.JSON(http.StatusOK, gin.H{"BloodTypesIncluded": info.BloodTypesIncluded, "BloodTypesNotIncluded": info.BloodTypesNotIncluded, "WorkHours": info.WorkHours, "Contacts": info.Contacts})
+	return
 }
 
 // GetProfile Профиль другого пользователя.
