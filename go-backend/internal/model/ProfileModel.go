@@ -5,9 +5,13 @@ import (
 )
 
 type ClinicQuestionnaire struct {
-	BloodTypes map[string]interface{} `json:"bloodTypes" binding:"required"`
-	WorkHours  string                 `json:"workHours" binding:"required"`
-	Contacts   string                 `json:"contacts" binding:"required"`
+	Email                 string   `json:"email"`
+	Name                  string   `json:"name"`
+	Address               string   `json:"address"`
+	BloodTypesIncluded    []string `json:"BloodTypesIncluded"`
+	BloodTypesNotIncluded []string `json:"bloodTypesNotIncluded"`
+	WorkHours             string   `json:"workHours"`
+	Contacts              string   `json:"contacts"`
 }
 
 type UserQuestionnaire struct {
@@ -31,10 +35,11 @@ type CreateUserQuestionnaire struct {
 }
 
 type CreateClinicQuestionnaire struct {
-	Email      string                 `json:"email" binding:"required"`
-	BloodTypes map[string]interface{} `json:"bloodTypes" binding:"required"`
-	WorkHours  string                 `json:"workHours" binding:"required"`
-	Contacts   string                 `json:"contacts" binding:"required"`
+	Email                 string   `json:"email" binding:"required"`
+	BloodTypesIncluded    []string `json:"BloodTypesIncluded"`
+	BloodTypesNotIncluded []string `json:"bloodTypesNotIncluded"`
+	WorkHours             string   `json:"workHours" binding:"required"`
+	Contacts              string   `json:"contacts" binding:"required"`
 }
 
 type CreateUserOtherInfo struct {
@@ -50,6 +55,10 @@ type CreateUserOtherInfo struct {
 
 type RequestUserOtherInfo struct {
 	Email string `json:"email"`
+}
+
+type RequestQuestionnaire struct {
+	Email string `json:"Email"`
 }
 
 type ResponseUserOtherInfo struct {

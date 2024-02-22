@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 	"net/http"
 )
 
@@ -132,7 +133,7 @@ func GetAllUserCard(context *gin.Context) {
 // @Tags Cards
 // @Router /v1/get_all_clinic_cards [get]
 func GetAllClinicCard(context *gin.Context) {
-	rows, err := database.Db.Query("SELECT name, email, address FROM vetdonor_clinic")
+	rows, err := database.Db.Query("SELECT name, email, address, bloodtypesincluded, bloodtypesnotincluded, workhours, contacts FROM vetdonor_clinic")
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
 		return
@@ -142,11 +143,12 @@ func GetAllClinicCard(context *gin.Context) {
 		if err != nil {
 		}
 	}(rows)
-	var clinics []model.ClinicInfo
+	var clinics []model.ClinicQuestionnaire
 	for rows.Next() {
-		var clinic model.ClinicInfo
-		err := rows.Scan(&clinic.Name, &clinic.Email, &clinic.Address)
+		var clinic model.ClinicQuestionnaire
+		err := rows.Scan(&clinic.Name, &clinic.Email, &clinic.Address, pq.Array(&clinic.BloodTypesIncluded), pq.Array(&clinic.BloodTypesNotIncluded), &clinic.WorkHours, &clinic.Contacts)
 		if err != nil {
+			fmt.Println(err)
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan rows"})
 			return
 		}

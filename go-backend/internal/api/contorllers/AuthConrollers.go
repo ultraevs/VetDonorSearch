@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jordan-wright/email"
+	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"net/smtp"
@@ -85,7 +86,7 @@ func UserCreate(context *gin.Context) {
 }
 
 // ClinicCreate создает новый аккаунт клиники.
-// @Summary Создать новоый аккаунт клиники
+// @Summary Создать новый аккаунт клиники
 // @Description Создает новый аккаунт клиники с предоставленным email, паролем, именем и адрессом.
 // @Accept json
 // @Produce json
@@ -109,8 +110,9 @@ func ClinicCreate(context *gin.Context) {
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read body"})
 	}
-	_, err = database.Db.Exec("INSERT INTO vetdonor_clinic (email, password, name, address) VALUES ($1, $2, $3, $4)", body.Email, string(hashPass), body.Name, body.Address)
+	_, err = database.Db.Exec("INSERT INTO vetdonor_clinic (email, password, name, address, workhours, contacts, bloodtypesincluded, bloodtypesnotincluded) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", body.Email, string(hashPass), body.Name, body.Address, " ", " ", pq.Array([]string{}), pq.Array([]string{}))
 	if err != nil {
+		fmt.Println(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create Clinic"})
 		return
 	}
@@ -134,22 +136,22 @@ func ClinicCreate(context *gin.Context) {
 	}
 	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
 	context.Set("Authorization", tokenString)
-
-	sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
-
-	subject := "Создание аккаунта"
-	content := fmt.Sprintf(`
-	<h1>Уважаемый пользователь!</h1>
-	<p>Вы получили это письмо, потому что на сайте <a href="https://vetdonor.shmyaks.ru/>vetdonor</a> был зарегистрирован аккаунт с вашим email.</p>
-	<p>Если это были не вы - обратитесь в поддержку нашего сайта: smyakneksbimisis@gmail.com</p>
-	`)
-	to := []string{body.Email}
-	err = sender.SendEmail(subject, content, to, nil, nil)
-	if err != nil {
-		fmt.Println(err)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
-		return
-	}
+	//
+	//sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
+	//
+	//subject := "Создание аккаунта"
+	//content := fmt.Sprintf(`
+	//<h1>Уважаемый пользователь!</h1>
+	//<p>Вы получили это письмо, потому что на сайте <a href="https://vetdonor.shmyaks.ru/>vetdonor</a> был зарегистрирован аккаунт с вашим email.</p>
+	//<p>Если это были не вы - обратитесь в поддержку нашего сайта: smyakneksbimisis@gmail.com</p>
+	//`)
+	//to := []string{body.Email}
+	//err = sender.SendEmail(subject, content, to, nil, nil)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
+	//	return
+	//}
 	context.JSON(http.StatusOK, gin.H{"message": "Clinic created successfully"})
 }
 
