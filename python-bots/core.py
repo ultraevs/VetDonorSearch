@@ -3,10 +3,11 @@ from telebot import types
 import os
 import requests
 import json
-
+from dotenv import load_dotenv
+load_dotenv()
 token = os.getenv("TELEGRAM_BOT_TOKEN")
 
-bot = telebot.TeleBot(token=token)
+bot = telebot.TeleBot(token='6853137874:AAEQKzX4i9BW5jJRNE2v0toGnv7hq3Wdyuw')
 
 global dt
 dt = {
@@ -33,7 +34,6 @@ def start(message):
         data = data[0]
         photo = requests.get(data['photoPath'])
 
-
         c = f'EMAIL: {data["email"]}\nТип: {types_[data["donationType"]]}'
 
         keyboard = types.InlineKeyboardMarkup()
@@ -45,6 +45,7 @@ def start(message):
 
         bot.send_photo(message.chat.id, photo.content, caption=c, reply_markup=keyboard)
 
+
 @bot.callback_query_handler(func=lambda call: True)
 def handler_(call):
     global dt
@@ -55,7 +56,8 @@ def handler_(call):
         r = requests.post('https://vetdonor.shmyaks.ru/v1/delete_application', json={'id': dt['id']})
         print(r)
         print(r.text)
-        r = requests.put('https://vetdonor.shmyaks.ru/v1/update_user_stats', json={'donationType': dt['donationType'], 'email': dt['email']})
+        r = requests.put('https://vetdonor.shmyaks.ru/v1/update_user_stats',
+                         json={'donationType': dt['donationType'], 'email': dt['email']})
         print(r)
         print(r.text)
     elif call.data == 'cn':
@@ -63,5 +65,6 @@ def handler_(call):
         r = requests.post('https://vetdonor.shmyaks.ru/v1/delete_application', json={'id': dt['id']})
         print(r)
         print(r.text)
+
 
 bot.infinity_polling()
