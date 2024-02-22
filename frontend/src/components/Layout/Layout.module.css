@@ -11,7 +11,11 @@
   flex-direction: column;
 }
 
+/* .page_right {
+  background: linear-gradient(131deg, #3c57e3 0%, #384ec6 100%);
+} */
+
 .img_cat img {
   width: 100%;
-  height: auto;
+  height: 100vh;
 }
