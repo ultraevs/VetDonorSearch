@@ -17,3 +17,9 @@ services:
     ports:
       - "8083:8083"
     network_mode: host
+  bot:
+    build:
+      context: .
+    ports:
+      - "8443:8443"
+    command: python core.py
