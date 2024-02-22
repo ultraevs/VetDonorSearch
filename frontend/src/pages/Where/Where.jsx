@@ -4,7 +4,7 @@ import MainLayout from '../../components/MainLayout/MainLayout'
 const Where = () => {
   return (
     <MainLayout>
-        Where
+      Where
     </MainLayout>
   )
 }
