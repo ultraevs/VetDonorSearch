@@ -177,8 +177,8 @@ func CheckDonation(context *gin.Context) {
 		return
 	}
 
-	filename := strconv.FormatInt(time.Now().Unix(), 10) + ".png"
-	out, err := os.Create("uploads/" + filename)
+	filename := strconv.FormatInt(time.Now().Unix(), 10)
+	out, err := os.Create("uploads/" + filename + ".png")
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create file"})
 		return
