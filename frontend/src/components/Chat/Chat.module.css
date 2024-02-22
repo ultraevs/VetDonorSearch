@@ -1,0 +1,127 @@
+.chat {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+  z-index: 1001;
+  border-radius: 12px 12px 0 12px;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+}
+
+.chat_open_button {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.chat.open {
+  height: 520px;
+}
+
+.chat_container {
+  height: 100%;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.chat_container input {
+  background: #efefef;
+  border-radius: 12px;
+  padding: 9px 31px;
+  border: none;
+  outline: none;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: rgba(64, 64, 64, 0.6);
+}
+
+.chat_container form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.chat_container button {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.chat_container button img {
+  width: 22px;
+  height: 22px;
+}
+
+.chat_header {
+  padding: 12px 15px 12px 45px;
+  background: linear-gradient(139deg, #3c57e3 0%, #384ec6 100%);
+  display: grid;
+  align-items: center;
+  grid-template-columns: 85% 15%;
+}
+
+.chat_header p {
+  font-size: 16px;
+  color: #fff;
+}
+
+.chat_messages {
+  height: 400px;
+  margin: 10px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.chat_message {
+  padding: 5px;
+  margin-bottom: 5px;
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+.chat_form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chat_input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.chat_submit_button {
+  margin-left: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.chat_close_button {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* .chat_outside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  cursor: pointer;
+} */

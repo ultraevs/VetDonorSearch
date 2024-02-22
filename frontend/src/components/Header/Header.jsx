@@ -1,18 +1,15 @@
-import React from 'react'
-import styles from "./Header.module.css";
-
 import NavBar from "../NavBar/NavBar";
-import Logo from "../../assets/img/LOGO.svg"
+import Logo from './../../assets/img/LOGO.svg'
+
+import styles from "./Header.module.css"
 
 const Header = () => {
-  return (
-    <div className={styles.header}>
-      <div className={styles.logo}>
-        <img src={Logo} alt="Logo" />
-      </div>
-      <NavBar />
-    </div>
-  )
+    return ( 
+        <div className={styles.header_block}>
+            <img src={Logo} alt="Логотип" />
+            <NavBar />
+        </div>
+    );
 }
-
-export default Header
+ 
+export default Header;
