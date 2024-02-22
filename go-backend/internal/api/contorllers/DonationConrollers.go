@@ -13,6 +13,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -37,6 +38,54 @@ func GetUserStat(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find stats"})
+}
+
+// TopDonationList Топ лист юзеров.
+// @Summary Топ лист из статистик юзеров
+// @Description Топ лист из статистик юзеров.
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CodeResponse "Статистика получена"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить статистику"
+// @Tags Stats
+// @Router /v1/top_list [get]
+func TopDonationList(context *gin.Context) {
+	rows, err := database.Db.Query("SELECT email, blood, plasma, platelets FROM vetdonor_donation_stat")
+	if err != nil {
+		context.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
+
+	var data []model.TopStat
+
+	for rows.Next() {
+		var d model.TopStat
+		err := rows.Scan(&d.Email, &d.Blood, &d.Platelets, &d.Plasma)
+		if err != nil {
+			context.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		data = append(data, d)
+	}
+
+	if err := rows.Err(); err != nil {
+		context.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	sort.SliceStable(data, func(i, j int) bool {
+		sumI := data[i].Blood + data[i].Plasma + data[i].Platelets
+		sumJ := data[j].Blood + data[j].Plasma + data[j].Platelets
+		return sumI > sumJ
+	})
+
+	context.JSON(200, data)
 }
 
 // UpdateUserStat Обновить Статистику.
@@ -70,7 +119,7 @@ func UpdateUserStat(context *gin.Context) {
 		return
 	}
 
-	query := fmt.Sprintf("UPDATE vetdonor_donation_stat SET %s = %s + 1 WHERE email = $1", request.DonationType, request.DonationType)
+	query := fmt.Sprintf("	UPDATE vetdonor_donation_stat SET %s = %s + 1 WHERE email = $1", request.DonationType, request.DonationType)
 	_, updateErr := database.Db.Exec(query, request.Email)
 	if updateErr != nil {
 		fmt.Println(updateErr)

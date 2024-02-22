@@ -8,4 +8,5 @@ import (
 func (router *Router) StatRouters(group *gin.RouterGroup) {
 	group.GET("/get_user_stats/:key", controller.GetUserStat)
 	group.PUT("/update_user_stats", controller.UpdateUserStat)
+	group.GET("/top_list", controller.TopDonationList)
 }
