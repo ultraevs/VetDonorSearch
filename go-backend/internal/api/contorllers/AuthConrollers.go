@@ -57,15 +57,15 @@ func UserCreate(context *gin.Context) {
 		return
 	}
 
-	context.SetSameSite(http.SameSiteLaxMode)
-	var domain string
-	if os.Getenv("SETUP_TYPE") == "local" {
-		domain = "localhost"
-	} else {
-		domain = "vetdonor.shmyaks.ru"
-	}
-	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
-	context.Set("Authorization", tokenString)
+	//context.SetSameSite(http.SameSiteLaxMode)
+	//var domain string
+	//if os.Getenv("SETUP_TYPE") == "local" {
+	//	domain = "localhost"
+	//} else {
+	//	domain = "vetdonor.shmyaks.ru"
+	//}
+	//context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	//context.Set("Authorization", tokenString)
 
 	sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
 
@@ -82,7 +82,7 @@ func UserCreate(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
+	context.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
 
 // ClinicCreate создает новый аккаунт клиники.
@@ -127,15 +127,15 @@ func ClinicCreate(context *gin.Context) {
 		return
 	}
 
-	context.SetSameSite(http.SameSiteLaxMode)
-	var domain string
-	if os.Getenv("SETUP_TYPE") == "local" {
-		domain = "localhost"
-	} else {
-		domain = "vetdonor.shmyaks.ru"
-	}
-	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
-	context.Set("Authorization", tokenString)
+	//context.SetSameSite(http.SameSiteLaxMode)
+	//var domain string
+	//if os.Getenv("SETUP_TYPE") == "local" {
+	//	domain = "localhost"
+	//} else {
+	//	domain = "vetdonor.shmyaks.ru"
+	//}
+	//context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	//context.Set("Authorization", tokenString)
 	//
 	//sender := NewGmailSender("VetDonor", os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
 	//
@@ -152,7 +152,7 @@ func ClinicCreate(context *gin.Context) {
 	//	context.JSON(http.StatusInternalServerError, gin.H{"error": "Error with sending email"})
 	//	return
 	//}
-	context.JSON(http.StatusOK, gin.H{"message": "Clinic created successfully"})
+	context.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
 
 // Login Вход в аккаунт.
@@ -215,16 +215,16 @@ func Login(context *gin.Context) {
 		return
 	}
 
-	context.SetSameSite(http.SameSiteLaxMode)
-	var domain string
-	if os.Getenv("SETUP_TYPE") == "local" {
-		domain = "localhost"
-	} else {
-		domain = "vetdonor.shmyaks.ru"
-	}
-	context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
-	context.Set("Authorization", tokenString)
-	context.JSON(http.StatusOK, gin.H{"response": "success"})
+	//context.SetSameSite(http.SameSiteLaxMode)
+	//var domain string
+	//if os.Getenv("SETUP_TYPE") == "local" {
+	//	domain = "localhost"
+	//} else {
+	//	domain = "vetdonor.shmyaks.ru"
+	//}
+	//context.SetCookie("Authorization", tokenString, 3600*24*30, "/", domain, false, false)
+	//context.Set("Authorization", tokenString)
+	context.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
 
 // Logout Выход из аккаунта.
