@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Chat.module.css";
 
 import Helper from "../../assets/img/helper.svg";
@@ -7,7 +7,7 @@ import Close from "../../assets/icon/close.png";
 
 const Chat = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState(["Hello", "pip"]);
+  const [messages, setMessages] = useState(["Привет!"]);
   const [currentMessage, setCurrentMessage] = useState("");
 
   const handleInputChange = (event) => {
@@ -18,6 +18,18 @@ const Chat = () => {
     event.preventDefault();
     setMessages([...messages, currentMessage]);
     setCurrentMessage("");
+  };
+
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      scrollToBottom();
+    }
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   };
 
   const handleOpenChat = () => {
@@ -59,9 +71,11 @@ const Chat = () => {
               <img src={Close} alt="" />
             </button>
           </div>
-          <div className={styles.chat_messages}>
+          <div className={styles.chat_messages} ref={chatContainerRef}>
             {messages.map((message, index) => (
-              <div className={styles.chat_message} key={index}><span>{message}</span></div>
+              <div className={styles.chat_message} key={index}>
+                <p>{message}</p>
+              </div>
             ))}
           </div>
           <form onSubmit={handleFormSubmit}>
