@@ -52,9 +52,9 @@ func Profile(context *gin.Context) {
 
 }
 
-// CreateQuestionnaire Создать анкету.
+// CreateClinicQuestionnaire Создать анкету клиники.
 // @Summary Создать анкету
-// @Description Создает анкету пользователя или клиники
+// @Description Создает анкету клиники
 // @Consumes application/json
 // @Produce json
 // @Param request body model.CreateClinicQuestionnaire true "Запрос на создание анкеты клиники"
@@ -62,7 +62,7 @@ func Profile(context *gin.Context) {
 // @Failure 400 {object} model.ErrorResponse "Не удалось создать анкету"
 // @Tags User
 // @Router /v1/create_questionnaire [post]
-func CreateQuestionnaire(context *gin.Context) {
+func CreateClinicQuestionnaire(context *gin.Context) {
 	var clinic model.CreateClinicQuestionnaire
 	if err := context.ShouldBindJSON(&clinic); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
@@ -96,7 +96,43 @@ func CreateQuestionnaire(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"message": "Clinic's questionnaire created successfully"})
 }
 
-// GetQuestionnaire Получить анкету клиники.
+// CreatePetQuestionnaire Создать анкету питомцв.
+// @Summary Создать питомца
+// @Description Создает анкету питомца
+// @Consumes application/json
+// @Produce json
+// @Param request body model.CreateUserQuestionnaire true "Запрос на создание анкеты питомца"
+// @Success 200 {object} model.CodeResponse "Успешное создание анкеты"
+// @Failure 400 {object} model.ErrorResponse "Не удалось создать анкету"
+// @Tags User
+// @Router /v1/create_user_questionnaire [post]
+func CreatePetQuestionnaire(context *gin.Context) {
+	var pet model.CreateUserQuestionnaire
+	if err := context.ShouldBindJSON(&pet); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+
+	var existingClinicID int
+	err := database.Db.QueryRow("SELECT id FROM vetdonor_users WHERE email = $1", pet.Email).Scan(&existingClinicID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
+		return
+	}
+
+	if existingClinicID != 0 {
+		_, err := database.Db.Exec("INSERT INTO vetdonor_pets (email, breed, petname, pettype, bloodtype, age, weight, vaccinations, photopath) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)", pet.Email, pet.Breed, pet.PetName, pet.PetType, pet.BloodType, pet.Age, pet.Weight, pet.Vaccinations, pet.PhotoPath)
+		if err != nil {
+			fmt.Println(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update pet's questionnaire"})
+			return
+		}
+		context.JSON(http.StatusOK, gin.H{"message": "Pet's questionnaire updated successfully"})
+		return
+	}
+}
+
+// GetClinicQuestionnaire Получить анкету клиники.
 // @Summary Получить анкету клиники
 // @Description Получить анкету клиники
 // @Consumes application/json
@@ -106,7 +142,7 @@ func CreateQuestionnaire(context *gin.Context) {
 // @Failure 400 {object} model.ErrorResponse "Не удалось получить анкету"
 // @Tags User
 // @Router /v1/get_questionnaire [post]
-func GetQuestionnaire(context *gin.Context) {
+func GetClinicQuestionnaire(context *gin.Context) {
 	var request model.RequestQuestionnaire
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
@@ -126,6 +162,56 @@ func GetQuestionnaire(context *gin.Context) {
 	info.BloodTypesNotIncluded = strings.Split(bloodTypesNotIncludedStr, ",")
 
 	context.JSON(http.StatusOK, gin.H{"BloodTypesIncluded": info.BloodTypesIncluded, "BloodTypesNotIncluded": info.BloodTypesNotIncluded, "WorkHours": info.WorkHours, "Contacts": info.Contacts})
+	return
+}
+
+// GetPetsQuestionnaire Получить анкету питомцев.
+// @Summary Получить анкету питомцев
+// @Description Получить анкету питомцев
+// @Consumes application/json
+// @Produce json
+// @Param request body model.RequestQuestionnaire true "Запрос на получение анкеты питомцев"
+// @Success 200 {object} model.CodeResponse "Успешно получена анкета"
+// @Failure 400 {object} model.ErrorResponse "Не удалось получить анкету"
+// @Tags User
+// @Router /v1/get_pets_questionnaire [post]
+func GetPetsQuestionnaire(context *gin.Context) {
+	var request model.RequestQuestionnaire
+	if err := context.ShouldBindJSON(&request); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+
+	rows, err := database.Db.Query("SELECT breed, petname, pettype, bloodtype, age, weight, vaccinations, photopath FROM vetdonor_pets WHERE email = $1", request.Email)
+	if err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get pets' questionnaire"})
+		return
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
+
+	var pets []model.PetQuestionnaire
+	for rows.Next() {
+		var pet model.PetQuestionnaire
+		if err := rows.Scan(&pet.Breed, &pet.PetName, &pet.PetType, &pet.BloodType, &pet.Age, &pet.Weight, &pet.Vaccinations, &pet.PhotoPath); err != nil {
+			fmt.Println(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan pets' questionnaire"})
+			return
+		}
+		pets = append(pets, pet)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error iterating over pets' questionnaire"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"pets": pets})
 	return
 }
 

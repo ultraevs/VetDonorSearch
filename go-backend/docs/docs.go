@@ -79,7 +79,7 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Создать новоый аккаунт клиники",
+                "summary": "Создать новый аккаунт клиники",
                 "parameters": [
                     {
                         "description": "Запрос на создание пользователя",
@@ -146,7 +146,7 @@ const docTemplate = `{
         },
         "/v1/create_questionnaire": {
             "post": {
-                "description": "Создает анкету пользователя или клиники",
+                "description": "Создает анкету клиники",
                 "produces": [
                     "application/json"
                 ],
@@ -162,6 +162,43 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.CreateClinicQuestionnaire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное создание анкеты",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось создать анкету",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/create_user_questionnaire": {
+            "post": {
+                "description": "Создает анкету питомца",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Создать питомца",
+                "parameters": [
+                    {
+                        "description": "Запрос на создание анкеты питомца",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateUserQuestionnaire"
                         }
                     }
                 ],
@@ -370,6 +407,43 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Не удалось получить карточки",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/get_pets_questionnaire": {
+            "post": {
+                "description": "Получить анкету питомцев",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получить анкету питомцев",
+                "parameters": [
+                    {
+                        "description": "Запрос на получение анкеты питомцев",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RequestQuestionnaire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получена анкета",
+                        "schema": {
+                            "$ref": "#/definitions/model.CodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Не удалось получить анкету",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResponse"
                         }
@@ -1046,6 +1120,49 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateUserQuestionnaire": {
+            "type": "object",
+            "required": [
+                "age",
+                "bloodType",
+                "breed",
+                "email",
+                "petName",
+                "petType",
+                "photoPath",
+                "vaccinations",
+                "weight"
+            ],
+            "properties": {
+                "age": {
+                    "type": "string"
+                },
+                "bloodType": {
+                    "type": "string"
+                },
+                "breed": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "petName": {
+                    "type": "string"
+                },
+                "petType": {
+                    "type": "string"
+                },
+                "photoPath": {
+                    "type": "string"
+                },
+                "vaccinations": {
+                    "type": "string"
+                },
+                "weight": {
                     "type": "string"
                 }
             }

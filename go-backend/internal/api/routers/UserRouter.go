@@ -7,8 +7,10 @@ import (
 )
 
 func (router *Router) UserRoutes(group *gin.RouterGroup) {
-	group.POST("/create_questionnaire", middleware.AuthMiddleware(), controller.CreateQuestionnaire)
-	group.POST("/get_questionnaire", controller.GetQuestionnaire)
+	group.POST("/create_questionnaire", middleware.AuthMiddleware(), controller.CreateClinicQuestionnaire)
+	group.POST("/get_questionnaire", controller.GetClinicQuestionnaire)
+	group.POST("create_user_questionnaire", controller.CreatePetQuestionnaire)
+	group.POST("/get_pets_questionnaire", controller.GetPetsQuestionnaire)
 	group.GET("/profile", middleware.AuthMiddleware(), controller.Profile)
 	group.GET("profile/:key", controller.GetProfile)
 	group.POST("/mark", controller.MarkAsNeed)

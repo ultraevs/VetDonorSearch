@@ -14,24 +14,32 @@ type ClinicQuestionnaire struct {
 	Contacts              string   `json:"contacts"`
 }
 
-type UserQuestionnaire struct {
-	Breed     string `json:"breed" binding:"required"`
-	PetName   string `json:"petName" binding:"required"`
-	BloodType string `json:"bloodType" binding:"required"`
-	Age       string `json:"age" binding:"required"`
+type PetQuestionnaire struct {
+	PetType      string `json:"petType"`
+	Breed        string `json:"breed"`
+	PetName      string `json:"petName"`
+	BloodType    string `json:"bloodType"`
+	Age          string `json:"age"`
+	Weight       string `json:"weight"`
+	Vaccinations string `json:"vaccinations"`
+	PhotoPath    string `json:"photoPath"`
 }
 
 type OneOfUserClinicQuestionnaireResponse struct {
 	ClinicQuestionnaire
-	UserQuestionnaire
+	PetQuestionnaire
 }
 
 type CreateUserQuestionnaire struct {
-	Email     string `json:"email" binding:"required"`
-	Breed     string `json:"breed" binding:"required"`
-	PetName   string `json:"petName" binding:"required"`
-	BloodType string `json:"bloodType" binding:"required"`
-	Age       string `json:"age" binding:"required"`
+	Email        string `json:"email" binding:"required"`
+	PetType      string `json:"petType" binding:"required"`
+	Breed        string `json:"breed" binding:"required"`
+	PetName      string `json:"petName" binding:"required"`
+	BloodType    string `json:"bloodType" binding:"required"`
+	Age          string `json:"age" binding:"required"`
+	Weight       string `json:"weight" binding:"required"`
+	Vaccinations string `json:"vaccinations" binding:"required"`
+	PhotoPath    string `json:"photoPath" binding:"required"`
 }
 
 type CreateClinicQuestionnaire struct {

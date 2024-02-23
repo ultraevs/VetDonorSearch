@@ -41,7 +41,7 @@ func UserCreate(context *gin.Context) {
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read body"})
 	}
-	_, err = database.Db.Exec("INSERT INTO vetdonor_users (email, password, name) VALUES ($1, $2, $3)", body.Email, string(hashPass), body.Name)
+	_, err = database.Db.Exec("INSERT INTO vetdonor_users (email, password, name, pets) VALUES ($1, $2, $3, $4)", body.Email, string(hashPass), body.Name, pq.Array([]string{}))
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
