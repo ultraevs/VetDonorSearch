@@ -61,9 +61,13 @@
 .chat_header {
   padding: 12px 15px 12px 45px;
   background: linear-gradient(139deg, #3c57e3 0%, #384ec6 100%);
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-columns: 85% 15%;
+  justify-content: end;
+}
+
+.chat_close_button {
+  margin-left: 25px;
 }
 
 .chat_header p {
@@ -127,7 +131,7 @@
   cursor: pointer;
 }
 
-.chat_close_button img {
-  width: 160px;
-  height: 160px;
+.chat_close_button i {
+  font-size: 16px;
+  color: #fff;
 }

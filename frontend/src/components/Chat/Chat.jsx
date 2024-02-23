@@ -68,7 +68,7 @@ const Chat = () => {
               className={styles.chat_close_button}
               onClick={handleCloseChat}
             >
-              <img src={Close} alt="" />
+              <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
           <div className={styles.chat_messages} ref={chatContainerRef}>
