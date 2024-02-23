@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./NeedDonor.module.css";
 
 import Blood from "../../assets/img/blood.svg";
@@ -7,6 +7,24 @@ import Dog from "../../assets/img/dog.svg";
 import PersonDog from "../../assets/img/personDog.svg";
 
 const NeedDonor = () => {
+  const [dogsCards, setDogsCards] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // useEffect(() => {
+  //   setLoading(true)
+  //   axios
+  //     .get("/user?ID=12345")
+  //     .then(function (response) {
+  //       setDogsCards(response.data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     })
+  //     .finally(function () {
+  //       setLoading(false)
+  //     });
+  // }, []);
+
   return (
     <div className="container">
       <div className={styles.needDonor_block}>

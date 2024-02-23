@@ -1,0 +1,47 @@
+.footer_bg {
+    margin-top: 100px;
+  background: linear-gradient(77deg, #3d57e1 0%, #3950c8 100%);
+  padding: 41px 0px;
+}
+
+.footer_block {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.footer_items {
+  width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.footer_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 68px;
+}
+
+.item_telegram,
+.item_mail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 11px;
+}
+
+.item_telegram a,
+.item_mail a {
+  font-weight: 400;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.item_brend p {
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: #fff;
+}

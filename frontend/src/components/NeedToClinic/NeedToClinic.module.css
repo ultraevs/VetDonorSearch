@@ -1,6 +1,6 @@
-.needToClinic_block {
-    margin-top: 100px;
-}
+/* .needToClinic_block {
+  margin-top: 100px;
+} */
 
 .need_item {
   background: #e6eaff;
@@ -13,10 +13,10 @@
 }
 
 .need_wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 19px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .item_info {
@@ -83,31 +83,31 @@
 }
 
 .info_comeIn {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
 }
 
 .comeIn_img {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .comeIn_img img:nth-child(1),
 .comeIn_img img:nth-child(2) {
-    margin-right: -21px;
+  margin-right: -21px;
 }
 
 .comeIn_img img:nth-child(1) {
-    z-index: 103;
+  z-index: 103;
 }
 
 .comeIn_img img:nth-child(2) {
-    z-index: 102;
+  z-index: 102;
 }
 
 .comeIn_img img:nth-child(3) {
-    z-index: 101;
+  z-index: 101;
 }

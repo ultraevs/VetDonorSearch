@@ -84,7 +84,7 @@ const NeedToClinic = () => {
             </div>
             <div className={styles.info_comeIn}>
               <Link>
-                <button className="button">Присоеденится</button>
+                <button className="button">Присоединиться</button>
               </Link>
               <div className={styles.comeIn_img}>
                 <img src={PersonComeIn} alt="personComeIn" />
@@ -165,7 +165,7 @@ const NeedToClinic = () => {
             </div>
             <div className={styles.info_comeIn}>
               <Link>
-                <button className="button">Присоеденится</button>
+                <button className="button">Присоединиться</button>
               </Link>
               <div className={styles.comeIn_img}>
                 <img src={PersonComeIn} alt="personComeIn" />
@@ -246,7 +246,7 @@ const NeedToClinic = () => {
             </div>
             <div className={styles.info_comeIn}>
               <Link>
-                <button className="button">Присоеденится</button>
+                <button className="button">Присоединиться</button>
               </Link>
               <div className={styles.comeIn_img}>
                 <img src={PersonComeIn} alt="personComeIn" />

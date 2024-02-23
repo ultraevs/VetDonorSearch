@@ -14,15 +14,18 @@
 }
 
 .events_item:nth-child(1) {
-  background: linear-gradient(47deg, #3455ff 0%, #4d6aff 100%);
+  background: url("../../assets/img/card1.svg");
+  background-size: cover;
 }
 
 .events_item:nth-child(2) {
-  background: #303556;
+  background: url("../../assets/img/card2.svg");
+  background-size: cover;
 }
 
 .events_item:nth-child(3) {
-  background: #15364e;
+  background: url("../../assets/img/сard3.svg");
+  background-size: cover;
 }
 
 .item_title {

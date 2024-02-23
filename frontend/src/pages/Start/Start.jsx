@@ -11,12 +11,12 @@ const Start = () => {
       <div className={styles.main_info}>
         <h1>Помощь животным</h1>
         <p>
-          Vetdonor hello помогает найти доноров
+          Vetdonor помогает найти доноров
           <br />
           крови для ваших питомцев
         </p>
         <Link to="/auth">
-          <button>Присоединиться</button>
+          <button className="button">Присоединиться</button>
         </Link>
       </div>
     </Layout>
