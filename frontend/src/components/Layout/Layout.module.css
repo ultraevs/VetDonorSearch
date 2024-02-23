@@ -1,0 +1,21 @@
+.start_page {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.page_left {
+  padding: 20px 0px 0px 110px;
+  background: #f9fbff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .page_right {
+  background: linear-gradient(131deg, #3c57e3 0%, #384ec6 100%);
+} */
+
+.img_cat img {
+  width: 100%;
+  height: 100vh;
+}
