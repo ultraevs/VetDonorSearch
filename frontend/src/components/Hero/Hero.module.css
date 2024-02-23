@@ -26,6 +26,15 @@
   color: #1f1f1f;
 }
 
+.hero_link{
+  text-decoration: none;
+}
+
+.hero_link:hover .arrow{
+  transition: all 0.4s ease-in;
+  transform: translateX(+10px);
+}
+
 .hero_text h1 {
   font-weight: 500;
   font-size: 54px;

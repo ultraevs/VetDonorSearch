@@ -2,7 +2,6 @@
   margin-top: 178px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
 }
 
 .main_info h1 {
@@ -15,16 +14,20 @@
   font-weight: 400;
   font-size: 24px;
   color: #1f1f1f;
+  margin-top: 4px;
+  margin-bottom: 36px;
 }
 
 .main_info button {
+  font-family: 'Montserrat', sans-serif;
+
   cursor: pointer;
   background: #2749fc;
   border-radius: 4px;
   padding: 8px 18px;
   outline: none;
   border: none;
-  font-weight: 100;
+  font-weight: 400;
   font-size: 22px;
   color: #fff;
 }

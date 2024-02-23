@@ -13,9 +13,9 @@ const NavBar = () => {
   }
   return (
     <div className={styles.navbar_block}>
-      <div className={styles.navbar_danger}>
+      {/* <div className={styles.navbar_danger}>
         <img src={Danger} alt="danger" />
-      </div>
+      </div> */}
       <div className={styles.navbar}>
       <NavLink className={({isActive}) => isActive ? classNames(styles.navbar_item, styles.active) : styles.navbar_item} to="/Main">главная</NavLink>
       <NavLink className={({isActive}) => isActive ? classNames(styles.navbar_item, styles.active) : styles.navbar_item} to="/Where">где сдать?</NavLink>

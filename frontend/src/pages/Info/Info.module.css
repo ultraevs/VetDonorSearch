@@ -1,0 +1,35 @@
+.container{
+    padding: 0 190px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.block_white{
+    background-color: #fff;
+
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.block_blue{
+    background-color: #E6EAFF;
+
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.block_blue h3, .block_white p{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: #1f1f1f;
+}
+
+.block_blue p, .block_white p{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    color: #1f1f1f;
+}
