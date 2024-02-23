@@ -22,16 +22,21 @@
   padding: 8px 18px;
   width: 303px;
   text-align: center;
+  color: #1f1f1f;
+}
+
+.choose_item.active {
+  background: #2749fc;
+  color: white;
 }
 
 .choose_item p {
   font-weight: 400;
-  font-size: 22px;
-  color: #1f1f1f;
+  font-size: 18px;
 }
 
 .data_main_info {
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
 .data_main_info {
@@ -48,7 +53,7 @@
 
 .data_enter p {
   font-weight: 400;
-  font-size: 22px;
+  font-size: 18px;
   color: #444;
 }
 
@@ -59,7 +64,7 @@
   border: 1px solid #cacaca;
   width: 100%;
   border-radius: 10px;
-  padding: 15px 14px;
+  padding: 10px 12px;
   border: none;
   outline: none;
   color: #888;
@@ -67,12 +72,13 @@
 }
 
 .data_button {
+    margin-top: 20px;
   outline: none;
   border: none;
   cursor: pointer;
   border-radius: 4px;
   padding: 8px 18px;
-  width: 205px;
+  width: 158px;
   background: #2749fc;
   font-weight: 400;
   font-size: 22px;
@@ -81,10 +87,6 @@
 
 .show_contacts {
   margin-top: 36px;
-}
-
-.data_button {
-  margin-top: 137px;
 }
 
 .profile_static {
@@ -142,4 +144,86 @@
   font-weight: 400;
   font-size: 16px;
   color: #000;
+}
+
+.data_photo p {
+  font-weight: 400;
+  font-size: 22px;
+  color: #000;
+}
+
+.photo_download {
+  margin-top: 9px;
+  border: 1px solid #cbcbcb;
+  border-radius: 12px;
+  padding: 40px 73px;
+  width: 289px;
+  height: 290px;
+  text-align: center;
+}
+
+.paginator p {
+    margin-top: 24px;
+  font-weight: 400;
+  font-size: 22px;
+  color: #000;
+}
+
+.paginator_click {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+
+.paginator_left button,
+.paginator_right button {
+  cursor: pointer;
+  border-radius: 32px;
+  border: 1px solid #b4b4b4;
+  background: transparent;
+  padding: 7px 25px;
+}
+
+.data_can {
+  margin-top: 14px;
+  width: 290px;
+  border: 1px solid #cbcbcb;
+  border-radius: 10px;
+  padding: 16px 43px;
+  text-align: center;
+}
+
+.data_can p {
+  font-weight: 400;
+  font-size: 18px;
+  color: #000;
+}
+
+.data_can p:nth-child(2) {
+  margin-top: 27px;
+}
+
+.needBlood {
+  margin-top: 14px;
+  width: 290px;
+  border: 1px solid #cbcbcb;
+  border-radius: 10px;
+  padding: 16px 43px;
+  text-align: center;
+}
+
+.needBlood button {
+    margin-top: 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 8px 18px;
+  width: 205px;
+  background: #2749fc;
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
 }

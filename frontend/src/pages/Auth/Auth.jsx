@@ -31,6 +31,7 @@ const Auth = () => {
       const response = await checkLoginForm(mail, password);
       console.log(response);
       if (response.success) {
+        window.localStorage.setItem("isAuth", true)
         navigate("/Main")
       } else {
         alert("Ошибка: " + response.error)
