@@ -24,7 +24,7 @@ const TopDonors = () => {
                 <img src={Donor} alt="person" />
               </div>
               <div className={styles.item_person_name}>
-                <p>Иван Лобода</p>
+                <p>Глеб</p>
               </div>
             </div>
             <div className={styles.item_count}>
@@ -51,7 +51,7 @@ const TopDonors = () => {
                 <img src={Donor2} alt="person" />
               </div>
               <div className={styles.item_person_name}>
-                <p>Иван Лобода</p>
+                <p>Артём</p>
               </div>
             </div>
             <div className={styles.item_count}>
@@ -78,7 +78,7 @@ const TopDonors = () => {
                 <img src={Donor3} alt="person" />
               </div>
               <div className={styles.item_person_name}>
-                <p>Иван Лобода</p>
+                <p>Константин</p>
               </div>
             </div>
             <div className={styles.item_count}>
@@ -105,7 +105,7 @@ const TopDonors = () => {
                 <img src={Donor4} alt="person" />
               </div>
               <div className={styles.item_person_name}>
-                <p>Иван Лобода</p>
+                <p>Иван</p>
               </div>
             </div>
             <div className={styles.item_count}>
@@ -132,7 +132,7 @@ const TopDonors = () => {
                 <img src={Donor5} alt="person" />
               </div>
               <div className={styles.item_person_name}>
-                <p>Иван Лобода</p>
+                <p>Михаил</p>
               </div>
             </div>
             <div className={styles.item_count}>
@@ -159,7 +159,7 @@ const TopDonors = () => {
                 <img src={Donor6} alt="person" />
               </div>
               <div className={styles.item_person_name}>
-                <p>Иван Лобода</p>
+                <p>Александр</p>
               </div>
             </div>
             <div className={styles.item_count}>
