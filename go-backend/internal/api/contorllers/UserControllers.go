@@ -34,7 +34,15 @@ func Profile(context *gin.Context) {
 				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find User"})
 				return
 			}
-			context.JSON(http.StatusOK, gin.H{"type": "user", "name": user.Name, "email": user.Email})
+
+			var otherInfo model.ResponseUserOtherInfo
+			err = database.Db.QueryRow("SELECT city, phone, telegram, path FROM vetdonor_user_other_info WHERE email = $1", email).Scan(&otherInfo.City, &otherInfo.Phone, &otherInfo.Telegram, &otherInfo.Path)
+			if err != nil && !errors.Is(err, sql.ErrNoRows) {
+				context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't find User"})
+				return
+			}
+
+			context.JSON(http.StatusOK, gin.H{"type": "user", "name": user.Name, "email": user.Email, "city": otherInfo.City, "phone": otherInfo.Phone, "telegram": otherInfo.Telegram, "path": otherInfo.Path})
 			return
 		}
 	case "clinic":
@@ -299,14 +307,33 @@ func CreateUserOtherInfo(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
 		return
 	}
-
-	_, err := database.Db.Exec("INSERT INTO vetdonor_user_other_info(email, name, surname, patronymic, age, gender, about) VALUES ($1, $2, $3, $4, $5, $6, $7)", request.Email, request.Name, request.Surname, request.Patronymic, request.Age, request.Gender, request.About)
+	var count int
+	err := database.Db.QueryRow("SELECT COUNT(*) FROM vetdonor_user_other_info WHERE email = $1", request.Email).Scan(&count)
 	if err != nil {
 		fmt.Println(err)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user's other info"})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check user's other info"})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"message": "User's other info created successfully"})
+
+	if count > 0 {
+		_, err := database.Db.Exec("UPDATE vetdonor_user_other_info SET name = $1, city = $2, phone = $3, telegram = $4, path = $5 WHERE email = $6",
+			request.Name, request.City, request.Phone, request.Telegram, request.Path, request.Email)
+		if err != nil {
+			fmt.Println(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user's other info"})
+			return
+		}
+	} else {
+		_, err := database.Db.Exec("INSERT INTO vetdonor_user_other_info (email, name, city, phone, telegram, path) VALUES ($1, $2, $3, $4, $5, $6)",
+			request.Email, request.Name, request.City, request.Phone, request.Telegram, request.Path)
+		if err != nil {
+			fmt.Println(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert user's other info"})
+			return
+		}
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "User's other info has been updated/inserted successfully"})
 }
 
 // GetUserOtherInfo Получить анкету юзера.

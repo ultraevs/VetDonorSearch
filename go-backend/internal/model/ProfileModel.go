@@ -51,14 +51,12 @@ type CreateClinicQuestionnaire struct {
 }
 
 type CreateUserOtherInfo struct {
-	Email      string `json:"email"`
-	Name       string `json:"name"`
-	Surname    string `json:"surname"`
-	Patronymic string `json:"patronymic"`
-	Age        string `json:"age"`
-	Gender     string `json:"gender"`
-	About      string `json:"about"`
-	City       string `json:"city"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	City     string `json:"city"`
+	Phone    string `json:"phone"`
+	Telegram string `json:"telegram"`
+	Path     string `json:"path"`
 }
 
 type RequestUserOtherInfo struct {
@@ -70,13 +68,10 @@ type RequestQuestionnaire struct {
 }
 
 type ResponseUserOtherInfo struct {
-	Name       string `json:"name"`
-	Surname    string `json:"surname"`
-	Patronymic string `json:"patronymic"`
-	Age        string `json:"age"`
-	Gender     string `json:"gender"`
-	About      string `json:"about"`
-	City       string `json:"city"`
+	City     string `json:"city"`
+	Phone    string `json:"phone"`
+	Telegram string `json:"telegram"`
+	Path     string `json:"path"`
 }
 
 type QuestionnaireRequest struct {

@@ -78,12 +78,10 @@ func ConnectDatabase() {
 	  	id SERIAL PRIMARY KEY,
 		email VARCHAR(255) NOT NULL UNIQUE,
 		name VARCHAR(255) NOT NULL,
-	    surname VARCHAR(255) NOT NULL,
-	    patronymic VARCHAR(255) NOT NULL,
-	    age VARCHAR(255) NOT NULL,
-	    gender VARCHAR(255) NOT NULL,
-	    about VARCHAR(255) NOT NULL,
-	    city VARCHAR(255) NOT NULL
+	    city VARCHAR(255) NOT NULL,
+	    phone VARCHAR(255) NOT NULL,
+	    telegram VARCHAR(255) NOT NULL,
+	    path VARCHAR(255) NOT NULL
 	);
 	CREATE TABLE IF NOT EXISTS vetdonor_donation_stat (
 	  	id SERIAL PRIMARY KEY,
