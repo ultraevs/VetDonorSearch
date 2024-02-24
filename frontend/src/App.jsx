@@ -7,6 +7,7 @@ import Main from './pages/Main/Main'
 
 import { Route, Routes } from 'react-router-dom'
 import Where from './pages/Where/Where'
+import ProfileClinic from './pages/ProfileClinic/ProfileClinic'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route path='/Profile' element={ <Profile />}/>
       <Route path='/Main' element={ <Main />}/>
       <Route path='/Where' element={ <Where />}/>
+      <Route path='/ProfileClinic' element={ <ProfileClinic />}/>
     </Routes>
   )
 }

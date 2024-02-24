@@ -15,7 +15,7 @@ export const createUser = async (name, mail, password) => {
         },
       }
     );
-    return {success: true}
+    return {success: true, data: response.data.token}
   } catch (error) {
     return {success: false, error: error};
   }
@@ -37,7 +37,7 @@ export const createClinic = async (name, address, mail, password) => {
         },
       }
     );
-    return {success: true}
+    return {success: true, data: response.data.token}
   } catch (error) {
     return {success: false, error: error};
   }

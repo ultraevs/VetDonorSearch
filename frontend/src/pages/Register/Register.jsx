@@ -8,6 +8,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { createUser, createClinic } from "./http";
 
+import Cookies from "js-cookie";
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -31,6 +33,8 @@ const Register = () => {
     try {
       const response = await createUser(name, mail, password);
       if (response.success) {
+        Cookies.set("Authorization", response.data);
+        window.localStorage.setItem("isAuth", true);
         navigate("/Main");
       } else {
         alert("Ошибка: " + response.error)
@@ -44,8 +48,9 @@ const Register = () => {
   const buttonClinicClick = async (name, adress, mail, password) => {
     try {
       const response = await createClinic(name, adress, mail, password);
-      console.log(response)
       if (response.success) {
+        Cookies.set("Authorization", response.data);
+        window.localStorage.setItem("isAuth", true);
         navigate("/Profile");
       } else {
         alert("Ошибка: " + response.error)
@@ -104,7 +109,8 @@ const Register = () => {
                 />
               </div>
               <div className={styles.enter_data_name}>
-                <p>Адресс</p>
+                <p>Адрес</p>
+                <p>Например: г. Москва, улица Пушкина, д. 18к4</p>
                 <input
                   type="text"
                   placeholder="Введите адресс клиники"

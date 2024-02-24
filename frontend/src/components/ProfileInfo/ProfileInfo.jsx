@@ -9,12 +9,75 @@ import infoGift from "../../assets/img/infoGift.svg";
 
 import RightArrow from "../../assets/img/RightArrow.svg";
 import LeftArrow from "../../assets/img/LeftArrow.svg";
+import DropZone from "./components/DropZone/DropZone";
+
+import useProfileData from "../../pages/Main/http";
+import { sendInfoUser } from "./http";
 
 const ProfileInfo = () => {
+  const profileData = useProfileData();
+  console.log(profileData);
   const [activeItem, setActiveItem] = useState(0);
+
+  // User form
+  const [inputName, setInputName] = useState("");
+  const [inputCity, setInputCity] = useState("");
+  const [inputNumber, setInputNumber] = useState("");
+  const [inputMail, setInputMail] = useState("");
+  const [inputTelegram, setInputTelegram] = useState("");
+
+  const clearInputsUser = () => {
+    setInputName(profileData?.name);
+    setInputCity(profileData?.city);
+    setInputNumber(profileData?.number);
+    setInputMail(profileData?.mail);
+    setInputTelegram(profileData?.telegram);
+  };
+
+  // Pet form
+  const [inputPetName, setInputPetName] = useState("");
+  const [inputPetType, setInputPetType] = useState("");
+  const [inputPetGen, setInputPetGen] = useState("");
+  const [inputPetAge, setInputPetAge] = useState("");
+  const [inputPetTypeBlood, setInputPetTypeBlood] = useState("");
+  const [inputPetWeight, setInputPetWeight] = useState("");
+  const [inputPetArray, setInputPetArray] = useState("");
+
+  const clearInputsPet = () => {
+    setInputPetName("");
+    setInputPetType("");
+    setInputPetGen("");
+    setInputPetAge("");
+    setInputPetTypeBlood("");
+    setInputPetWeight("");
+    setInputPetArray("");
+  };
+
+  const userSaveInfo = async (city, email, name, path, phone, telegram) => {
+    try {
+      const response = await sendInfoUser(city, email, name, path, phone, telegram);
+      console.log(response)
+      if (response.success) {
+      } else {
+        alert(response.error)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    clearInputsUser();
+  };
+
+  const petSaveInfo = () => {
+    clearInputsPet();
+  };
 
   const handleItemClick = (item) => {
     setActiveItem(item);
+    if (item === 0) {
+      clearInputsPet();
+    } else {
+      clearInputsUser();
+    }
   };
   return (
     <div className="container">
@@ -44,54 +107,118 @@ const ProfileInfo = () => {
                 <>
                   <div className={styles.data_enter}>
                     <p>ФИО</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder={`${profileData?.name}`}
+                      value={inputName}
+                      onChange={(event) => setInputName(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Город</p>
-                    <input type="text" placeholder="Город" />
+                    <input
+                      type="text"
+                      placeholder={`${profileData?.city}`}
+                      value={inputCity}
+                      onChange={(event) => setInputCity(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Телефон</p>
-                    <input type="text" placeholder="Телефон" />
+                    <input
+                      type="text"
+                      placeholder={`${profileData?.number}`}
+                      value={inputNumber}
+                      onChange={(event) => setInputNumber(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Почта</p>
-                    <input type="text" placeholder="Почта" />
+                    <input
+                      type="text"
+                      placeholder={`${profileData?.email}`}
+                      value={inputMail}
+                      onChange={(event) => setInputMail(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Telegram</p>
-                    <input type="text" placeholder="Telegram" />
+                    <input
+                      type="text"
+                      placeholder={`${profileData?.telegram}`}
+                      value={inputTelegram}
+                      onChange={(event) => setInputTelegram(event.target.value)}
+                    />
                   </div>
                 </>
               ) : (
                 <>
                   <div className={styles.data_enter}>
                     <p>Кличка</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Кличка"
+                      value={inputPetName}
+                      onChange={(event) => setInputPetName(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Питомец</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Питомец"
+                      value={inputPetType}
+                      onChange={(event) => setInputPetType(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Порода</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Порода"
+                      value={inputPetGen}
+                      onChange={(event) => setInputPetGen(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Возраст</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Возраст"
+                      value={inputPetAge}
+                      onChange={(event) => setInputPetAge(event.target.value)}
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Тип крови</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Тип крови"
+                      value={inputPetTypeBlood}
+                      onChange={(event) =>
+                        setInputPetTypeBlood(event.target.value)
+                      }
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Вес</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Вес"
+                      value={inputPetWeight}
+                      onChange={(event) =>
+                        setInputPetWeight(event.target.value)
+                      }
+                    />
                   </div>
                   <div className={styles.data_enter}>
                     <p>Действующие прививки</p>
-                    <input type="text" placeholder="ФИО" />
+                    <input
+                      type="text"
+                      placeholder="Действующие прививки"
+                      value={inputPetArray}
+                      onChange={(event) => setInputPetArray(event.target.value)}
+                    />
                   </div>
                 </>
               )}
@@ -101,16 +228,25 @@ const ProfileInfo = () => {
                 <p>Скрыть контакты</p>
               </div>
             )}
-            <div className={styles.data_button}>Сохранить</div>
+            <div
+              className={styles.data_button}
+              onClick={() => {
+                if (activeItem === 0) {
+                  userSaveInfo(inputCity, inputMail, inputName, "path", inputNumber, inputTelegram);
+                } else {
+                  petSaveInfo();
+                }
+              }}
+            >
+              Сохранить
+            </div>
           </div>
           <div className={styles.data_right}>
             {activeItem === 0 && (
               <>
                 <div className={styles.data_photo}>
                   <p>Фотография пользователя</p>
-                  <div className={styles.photo_download}>
-                    <img src="" alt="photo" />
-                  </div>
+                  <DropZone />
                 </div>
               </>
             )}
@@ -118,9 +254,7 @@ const ProfileInfo = () => {
               <>
                 <div className={styles.data_photo}>
                   <p>Фотография питомца</p>
-                  <div className={styles.photo_download}>
-                    <img src="" alt="photo" />
-                  </div>
+                  <DropZone />
                 </div>
                 <div className={styles.data_can}>
                   <p>Мой питомец может сдавать кровь сейчас</p>

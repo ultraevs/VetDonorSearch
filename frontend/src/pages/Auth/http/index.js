@@ -14,7 +14,7 @@ export const checkLoginForm = async (mail, password) => {
         },
       }
     );
-    return {success: true}
+    return {success: true, data: response.data.token}
   } catch (error) {
     return {success: false, error: error};
   }

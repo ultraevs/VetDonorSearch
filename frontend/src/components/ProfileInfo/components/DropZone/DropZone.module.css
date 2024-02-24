@@ -1,0 +1,26 @@
+.app {
+    margin-top: 14px;
+    width: 300px;
+    height: 300px;
+    font-size: 18px;
+}
+
+.drop {
+    width: 100%;
+    height: 100%;
+    border: solid 1px #cacaca;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.drop_area {
+    width: 100%;
+    height: 100%;
+    border: dashed 3px #cacaca;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
