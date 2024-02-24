@@ -36,7 +36,7 @@ const Auth = () => {
         console.log(response)
         Cookies.set("Authorization", response.data);
         window.localStorage.setItem("isAuth", true);
-        navigate("/Main");
+        navigate("/");
       } else {
         alert("Ошибка: " + response.error);
       }

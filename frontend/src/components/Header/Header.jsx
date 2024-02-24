@@ -9,7 +9,7 @@ import Logo from './../../assets/img/LOGO.svg'
 const Header = () => {
     return (
         <div className={styles.header_block}>
-            <NavLink to='/Main'>
+            <NavLink to='/'>
                 <img src={Logo} alt="Логотип" />
             </NavLink>
             <NavBar />

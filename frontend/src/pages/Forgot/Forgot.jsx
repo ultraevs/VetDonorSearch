@@ -9,7 +9,6 @@ import styles from "./Forgot.module.css";
 
 import { checkForgotForm } from "./http";
 
-import Cookies from "js-cookie";
 
 const Forgot = () => {
     const navigate = useNavigate();

@@ -18,7 +18,7 @@ const NavBar = (title) => {
               ? classNames(styles.navbar_item, styles.active) 
               : styles.navbar_item 
           } 
-          to="/Main" 
+          to="/" 
         > 
           главная 
         </NavLink> 
