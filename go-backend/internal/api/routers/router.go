@@ -25,9 +25,9 @@ func (router *Router) Run(port string) error {
 func (router *Router) Setup() {
 	gin.SetMode(gin.DebugMode)
 	router.engine.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "*"},
+		AllowOrigins:     []string{"http://localhost:5173", "https://vetdonor.shmyaks.ru"},
 		AllowMethods:     []string{"*"},
-		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		AllowHeaders:     []string{"Authorization", "Content-Type", "*"},
 		AllowCredentials: true,
 	}))
 	router.engine.GET("v1/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
