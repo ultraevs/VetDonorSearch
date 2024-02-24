@@ -361,3 +361,29 @@ func GetUserOtherInfo(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, gin.H{"city": form.City, "phone": form.Phone, "telegram": form.Telegram, "path": form.Path})
 }
+
+// MarkAsDonor Создать анкету донора.
+// @Summary Создать анкету донора
+// @Description Создает анкету донора
+// @Consumes application/json
+// @Produce json
+// @Param request body model.SetDonor true "Запрос на создание анкеты донора"
+// @Success 200 {object} model.CodeResponse "Успешно создана анкета"
+// @Failure 400 {object} model.ErrorResponse "Не удалось создать анкету"
+// @Tags User
+// @Router /v1/create_donor [get]
+func MarkAsDonor(context *gin.Context) {
+	var request model.SetDonor
+	if err := context.ShouldBindJSON(&request); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Can't read the body"})
+		return
+	}
+
+	_, err := database.Db.Exec("INSERT INTO vetdonor_pet_donors (email, name, petname, blood, breed, contacts) VALUES ($1, $2, $3, $4, $5, $6)",
+		request.Email, request.Name, request.PetName, request.Blood, request.Breed, request.Contacts)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Can't push to database"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"response": "success"})
+}

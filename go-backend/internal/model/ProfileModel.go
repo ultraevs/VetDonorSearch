@@ -78,3 +78,12 @@ type QuestionnaireRequest struct {
 	Type string          `json:"type"`
 	Data json.RawMessage `json:"data"`
 }
+
+type SetDonor struct {
+	Email    string `json:"Email"`
+	Name     string `json:"Name"`
+	PetName  string `json:"PetName"`
+	Blood    string `json:"Blood"`
+	Breed    string `json:"Breed"`
+	Contacts string `json:"Contacts"`
+}

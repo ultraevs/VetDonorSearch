@@ -91,6 +91,16 @@ func ConnectDatabase() {
     	platelets INTEGER
 	);
 
+	CREATE TABLE IF NOT EXISTS vetdonor_pet_donors (
+	  	id SERIAL PRIMARY KEY,
+		email VARCHAR(255) NOT NULL UNIQUE,
+		name VARCHAR(255) NOT NULL,
+		petname VARCHAR(255) NOT NULL,
+    	blood INTEGER,
+    	breed VARCHAR(255) NOT NULL,
+    	contacts VARCHAR(255) NOT NULL
+	);
+
 	CREATE TABLE IF NOT EXISTS vetdonor_donation (
 	    id SERIAL PRIMARY KEY,
 	    email VARCHAR(255) NOT NULL,

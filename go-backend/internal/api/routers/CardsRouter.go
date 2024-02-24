@@ -10,4 +10,5 @@ func (router *Router) CardsRoutes(group *gin.RouterGroup) {
 	group.GET("/get_clinic_cards", controller.GetClinicCard)
 	group.GET("/get_all_user_cards", controller.GetAllUserCard)
 	group.GET("/get_all_clinic_cards", controller.GetAllClinicCard)
+	group.GET("/get_all_donors_cards", controller.GetAllDonors)
 }
