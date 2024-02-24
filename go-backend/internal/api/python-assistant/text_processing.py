@@ -103,10 +103,10 @@ def main(text, retrain=False):
 
     formatted_clinics_text = ''
     for clinic in allowed_cards:
-        formatted_clinics_text += f'{clinic["name"]}\n{clinic["address"]}\n{clinic["contacts"]}\n'
+        formatted_clinics_text += f'{clinic["name"]}<br/>{clinic["address"]}<br/>{clinic["contacts"]}<br/>'
 
     if is_city:
-        ans = f'{answers[f"{is_city}"][class_].format(city.capitalize())}\n\n{formatted_clinics_text}'
+        ans = f'{answers[f"{is_city}"][class_].format(city.capitalize())}<br/><br/>{formatted_clinics_text}'
     else:
         ans = answers[f"{is_city}"][class_]
     return ans

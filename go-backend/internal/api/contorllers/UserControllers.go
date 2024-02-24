@@ -135,8 +135,20 @@ func CreatePetQuestionnaire(context *gin.Context) {
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update pet's questionnaire"})
 			return
 		}
-		context.JSON(http.StatusOK, gin.H{"message": "Pet's questionnaire updated successfully"})
-		return
+		var currentPets []string
+		err = database.Db.QueryRow("SELECT pets FROM vetdonor_users WHERE email = $1", pet.Email).Scan(&currentPets)
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query database"})
+			return
+		}
+
+		currentPets = append(currentPets, pet.PetName)
+
+		_, err = database.Db.Exec("UPDATE vetdonor_users SET pets = $1 WHERE email = $2", currentPets, pet.Email)
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user's pets"})
+			return
+		}
 	}
 }
 
