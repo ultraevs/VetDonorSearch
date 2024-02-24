@@ -1,0 +1,275 @@
+.profileInfo_block {
+    display: grid;
+    grid-template-columns: auto 289px;
+}
+
+.profile_data {
+    display: flex;
+    flex-direction: row;
+    gap: 54px;
+}
+
+.data_types {
+    border-radius: 12px;
+    padding: 18px 28px;
+    width: 359px;
+    background: #e6eaff;
+}
+
+.choose_item {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 8px 18px;
+    width: 303px;
+    text-align: center;
+    color: #1f1f1f;
+}
+
+.needable {
+    width: 350px;
+}
+
+.needable p {
+    font-weight: 400;
+    font-size: 22px;
+    color: #000;
+}
+
+.needable p span {
+    font-size: 18px;
+    color: #474747;
+}
+
+.types_wrapper {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.types_item {
+    cursor: pointer;
+    border: 1px solid #b2b2b2;
+    background: #ebebeb;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+}
+
+.types_item.activeType {
+    background: #edf8f2;
+    border: 1px solid #a9e2c0;
+}
+
+.types_item.activeType p {
+    color: #39c47d;
+}
+
+.types_item p {
+    font-weight: 500;
+    font-size: 16px;
+    color: #a5a5a5;
+}
+
+.typesOfBlood {
+    margin-top: 12px;
+}
+
+.choose_item.active {
+    background: #2749fc;
+    color: white;
+}
+
+.choose_item p {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.data_main_info {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.data_enter {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.data_enter p {
+    font-weight: 400;
+    font-size: 18px;
+    color: #444;
+}
+
+.data_enter input {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.02), 0 9px 9px 0 rgba(0, 0, 0, 0.01),
+        0 20px 12px 0 rgba(0, 0, 0, 0.01), 0 36px 14px 0 rgba(0, 0, 0, 0),
+        0 56px 16px 0 rgba(0, 0, 0, 0);
+    border: 1px solid #cacaca;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: none;
+    outline: none;
+    color: #888;
+    font-weight: 300;
+}
+
+.data_button {
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 8px 18px;
+    width: 158px;
+    background: #2749fc;
+    font-weight: 400;
+    font-size: 22px;
+    color: #fff;
+}
+
+.show_contacts {
+    margin-top: 36px;
+}
+
+.profile_static {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+}
+
+.comeIn {
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 8px 34px;
+    width: 289px;
+    text-align: center;
+}
+
+.comeIn a {
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000;
+}
+
+.interest_info p {
+    font-weight: 500;
+    font-size: 22px;
+    color: #000;
+}
+
+.interest_items {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.interest_item {
+    width: 290px;
+}
+
+.interest_item a {
+    text-decoration: none;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.interest_item_text {
+    border-bottom: 1px solid #d9d9d9;
+    border-left: 1px solid #d9d9d9;
+    border-right: 1px solid #d9d9d9;
+    padding: 30px 27px;
+}
+
+.interest_item_text p {
+    font-weight: 400;
+    font-size: 16px;
+    color: #000;
+}
+
+.data_photo p {
+    font-weight: 400;
+    font-size: 22px;
+    color: #000;
+}
+
+.photo_download {
+    margin-top: 9px;
+    border: 1px solid #cbcbcb;
+    border-radius: 12px;
+    padding: 40px 73px;
+    width: 289px;
+    height: 290px;
+    text-align: center;
+}
+
+.paginator p {
+    margin-top: 24px;
+    font-weight: 400;
+    font-size: 22px;
+    color: #000;
+}
+
+.paginator_click {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+}
+
+.paginator_left button,
+.paginator_right button {
+    cursor: pointer;
+    border-radius: 32px;
+    border: 1px solid #b4b4b4;
+    background: transparent;
+    padding: 7px 25px;
+}
+
+.data_can {
+    margin-top: 14px;
+    width: 290px;
+    border: 1px solid #cbcbcb;
+    border-radius: 10px;
+    padding: 16px 43px;
+    text-align: center;
+}
+
+.data_can p {
+    font-weight: 400;
+    font-size: 18px;
+    color: #000;
+}
+
+.data_can p:nth-child(2) {
+    margin-top: 27px;
+}
+
+.needBlood {
+    margin-top: 14px;
+    width: 290px;
+    border: 1px solid #cbcbcb;
+    border-radius: 10px;
+    padding: 16px 43px;
+    text-align: center;
+}
+
+.needBlood button {
+    margin-top: 10px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 8px 18px;
+    width: 205px;
+    background: #2749fc;
+    font-weight: 400;
+    font-size: 16px;
+    color: #fff;
+}

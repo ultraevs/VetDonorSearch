@@ -3,11 +3,13 @@ import Layout from "../../components/Layout/Layout";
 
 import classNames from "class-names";
 
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./Auth.module.css";
 
 import { checkLoginForm } from "./http";
+
+import Cookies from "js-cookie";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -29,19 +31,20 @@ const Auth = () => {
   const buttonClick = async (mail, password) => {
     try {
       const response = await checkLoginForm(mail, password);
-      console.log(response);
       if (response.success) {
-        window.localStorage.setItem("isAuth", true)
-        navigate("/Main")
+        console.log(response)
+        Cookies.set("Authorization", response.data);
+        window.localStorage.setItem("isAuth", true);
+        navigate("/Main");
       } else {
-        alert("Ошибка: " + response.error)
+        alert("Ошибка: " + response.error);
       }
       clearInputs();
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   return (
     <Layout>
       <div className={styles.main_info}>
@@ -90,7 +93,8 @@ const Auth = () => {
         </div>
         <div className={styles.enter}>
           <Link>
-            <button className="button"
+            <button
+              className="button"
               onClick={() => buttonClick(inputMail, inputPassword)}
             >
               Войти

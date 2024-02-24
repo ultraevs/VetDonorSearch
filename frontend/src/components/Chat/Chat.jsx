@@ -3,11 +3,10 @@ import styles from "./Chat.module.css";
 
 import Helper from "../../assets/img/helper.svg";
 import Send from "../../assets/icon/send.png";
-import Close from "../../assets/icon/close.png";
 
 const Chat = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState(["Привет!"]);
+  const [messages, setMessages] = useState(["Привет!", "Напиши мне что-нибудь."]);
   const [currentMessage, setCurrentMessage] = useState("");
 
   const handleInputChange = (event) => {
