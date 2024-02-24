@@ -5,9 +5,8 @@ import requests
 import json
 from dotenv import load_dotenv
 load_dotenv()
-token = os.getenv("TELEGRAM_BOT_TOKEN")
 
-bot = telebot.TeleBot(token='6853137874:AAEQKzX4i9BW5jJRNE2v0toGnv7hq3Wdyuw')
+bot = telebot.TeleBot(token=token)
 
 global dt
 dt = {
