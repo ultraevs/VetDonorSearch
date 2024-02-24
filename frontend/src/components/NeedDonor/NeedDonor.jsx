@@ -1,29 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./NeedDonor.module.css";
 
 import Blood from "../../assets/img/blood.svg";
 import Location from "../../assets/img/map.svg";
+import Cat from "../../assets/img/cat1.svg";
+import Cat2 from "../../assets/img/cat2.svg";
 import Dog from "../../assets/img/dog.svg";
+import Dog2 from "../../assets/img/dog2.svg";
+
+import PersonCat from "../../assets/img/personCat1.svg";
+import PersonCat2 from "../../assets/img/personCat2.svg";
 import PersonDog from "../../assets/img/personDog.svg";
+import PersonDog2 from "../../assets/img/personDog2.svg";
+
 
 const NeedDonor = () => {
   const [dogsCards, setDogsCards] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setLoading(true)
-  //   axios
-  //     .get("/user?ID=12345")
-  //     .then(function (response) {
-  //       setDogsCards(response.data);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     })
-  //     .finally(function () {
-  //       setLoading(false)
-  //     });
-  // }, []);
 
   return (
     <div className="container">
@@ -38,16 +31,16 @@ const NeedDonor = () => {
                 </div>
                 <div className={styles.item_type_text}>
                   <p>Цельная кровь</p>
-                  <p>DEA 1.1</p>
+                  <p>A</p>
                 </div>
               </div>
               <div className={styles.item_photo}>
-                <img src={Dog} alt="dog" />
+                <img src={Cat} alt="cat" />
               </div>
               <div className={styles.item_info}>
                 <div className={styles.item_info_name}>
-                  <p>Бобик</p>
-                  <p>Золотистый ретривер</p>
+                  <p>Барсик</p>
+                  <p>Ли Хуа</p>
                 </div>
                 <div className={styles.item_info_adress}>
                   <div className={styles.item_info_adress_img}>
@@ -65,7 +58,7 @@ const NeedDonor = () => {
                       <img src={PersonDog} alt="person" />
                     </div>
                     <div className={styles.item_info_found_person_text}>
-                      <p>Миша Евсеев</p>
+                      <p>Клиника Прайд</p>
                     </div>
                   </div>
                 </div>
@@ -84,16 +77,16 @@ const NeedDonor = () => {
                 </div>
                 <div className={styles.item_type_text}>
                   <p>Цельная кровь</p>
-                  <p>DEA 1.1</p>
+                  <p>B</p>
                 </div>
               </div>
               <div className={styles.item_photo}>
-                <img src={Dog} alt="dog" />
+                <img src={Cat2} alt="cat" />
               </div>
               <div className={styles.item_info}>
                 <div className={styles.item_info_name}>
-                  <p>Бобик</p>
-                  <p>Золотистый ретривер</p>
+                  <p>Джонни</p>
+                  <p>Британец</p>
                 </div>
                 <div className={styles.item_info_adress}>
                   <div className={styles.item_info_adress_img}>
@@ -108,10 +101,10 @@ const NeedDonor = () => {
                   <p>Ищет</p>
                   <div className={styles.item_info_found_person}>
                     <div className={styles.item_info_found_person_img}>
-                      <img src={PersonDog} alt="person" />
+                      <img src={PersonCat} alt="person" />
                     </div>
                     <div className={styles.item_info_found_person_text}>
-                      <p>Миша Евсеев</p>
+                      <p>Клиника Вместе</p>
                     </div>
                   </div>
                 </div>
@@ -130,7 +123,7 @@ const NeedDonor = () => {
                 </div>
                 <div className={styles.item_type_text}>
                   <p>Цельная кровь</p>
-                  <p>DEA 1.1</p>
+                  <p>DEA 1.1+</p>
                 </div>
               </div>
               <div className={styles.item_photo}>
@@ -138,8 +131,8 @@ const NeedDonor = () => {
               </div>
               <div className={styles.item_info}>
                 <div className={styles.item_info_name}>
-                  <p>Бобик</p>
-                  <p>Золотистый ретривер</p>
+                  <p>Мухтар</p>
+                  <p>Немецкая овчарка</p>
                 </div>
                 <div className={styles.item_info_adress}>
                   <div className={styles.item_info_adress_img}>
@@ -154,10 +147,10 @@ const NeedDonor = () => {
                   <p>Ищет</p>
                   <div className={styles.item_info_found_person}>
                     <div className={styles.item_info_found_person_img}>
-                      <img src={PersonDog} alt="person" />
+                      <img src={PersonCat2} alt="person" />
                     </div>
                     <div className={styles.item_info_found_person_text}>
-                      <p>Миша Евсеев</p>
+                      <p>Иван Лобода</p>
                     </div>
                   </div>
                 </div>
@@ -176,16 +169,16 @@ const NeedDonor = () => {
                 </div>
                 <div className={styles.item_type_text}>
                   <p>Цельная кровь</p>
-                  <p>DEA 1.1</p>
+                  <p>DEA 1.1-</p>
                 </div>
               </div>
               <div className={styles.item_photo}>
-                <img src={Dog} alt="dog" />
+                <img src={Dog2} alt="dog" />
               </div>
               <div className={styles.item_info}>
                 <div className={styles.item_info_name}>
-                  <p>Бобик</p>
-                  <p>Золотистый ретривер</p>
+                  <p>Шон</p>
+                  <p>Алабай</p>
                 </div>
                 <div className={styles.item_info_adress}>
                   <div className={styles.item_info_adress_img}>
@@ -200,10 +193,10 @@ const NeedDonor = () => {
                   <p>Ищет</p>
                   <div className={styles.item_info_found_person}>
                     <div className={styles.item_info_found_person_img}>
-                      <img src={PersonDog} alt="person" />
+                      <img src={PersonDog2} alt="person" />
                     </div>
                     <div className={styles.item_info_found_person_text}>
-                      <p>Миша Евсеев</p>
+                      <p>Михаил Евсеев</p>
                     </div>
                   </div>
                 </div>

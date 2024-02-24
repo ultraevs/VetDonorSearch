@@ -26,6 +26,32 @@
   color: #1f1f1f;
 }
 
+.hero_link{
+  text-decoration: none;
+  width: fit-content;
+}
+
+.hero_link:hover .arrow{
+  transition: all 0.4s ease-in;
+  transform: translateX(+10px);
+}
+
+.hero_button{
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  width: fit-content;
+
+  text-align: left;
+
+  font-family: 'Montserrat', sans-serif;
+}
+
+.hero_button:hover .arrow{
+  transition: all 0.4s ease-in;
+  transform: translateX(+10px);
+}
+
 .hero_text h1 {
   font-weight: 500;
   font-size: 54px;
@@ -55,4 +81,74 @@
 
 .hero_photo img {
   margin-top: -230px;
+}
+
+.close{
+  border: none;
+  background: none;
+  width: 100%;
+
+  cursor: pointer;
+}
+
+.close img{
+  float: right;
+}
+
+.forma {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.form_text{
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 100%;
+  gap: 12px;
+
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  color: #444444;
+  font-weight: 400;
+}
+
+.form_text input{
+  border: 1px solid #cacaca;
+  border-radius: 0.19rem;
+  padding: 0.31rem 1rem;
+  width: 18.12rem;
+  height: 2.12rem;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: #b1b1b1;
+}
+
+.post_btn{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.post_form{
+  cursor: pointer;
+  margin-top: 27px;
+
+  border: none;
+  background: #2749fc;
+
+  border-radius: 0.25rem;
+  padding: 0.5rem 1.12rem;
+  width: 9.94rem;
+  height: 2.69rem;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  color: #fff;
 }

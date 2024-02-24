@@ -51,23 +51,42 @@
 
 .types_wrapper {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 8px;
 }
 
-.types_item {
-  border: 1px solid #a9e2c0;
-  background: #edf8f2;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
+.types_item_enough p{
+  
 }
 
-.types_item p {
+.types_item_enough {
+  background: #edf8f2;
+  border: 1px solid #a9e2c0;
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+
   font-weight: 500;
-  font-size: 16px;
+  font-size: 1rem;
   color: #39c47d;
+
+  height: fit-content;
+}
+
+.types_item_need {
+  border: 1px solid #E2A9A9;
+  background: #F8EDED;
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+
+  font-weight: 500;
+  font-size: 1rem;
+  color: #c43939;
+
+  height: fit-content;
+
 }
 
 .info_comeIn button {

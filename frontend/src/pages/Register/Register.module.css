@@ -53,6 +53,11 @@
   gap: 3px;
 }
 
+.enter_data_name p:nth-child(2) {
+  font-size: 14px;
+  color: #888;
+}
+
 .enter_data p {
   color: #1f1f1f;
   font-weight: 500;
