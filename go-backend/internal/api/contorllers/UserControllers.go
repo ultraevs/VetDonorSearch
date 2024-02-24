@@ -359,5 +359,5 @@ func GetUserOtherInfo(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user's other info"})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"name": form.Name, "surname": form.Surname, "patronymic": form.Patronymic, "age": form.Age, "gender": form.Gender, "about": form.About})
+	context.JSON(http.StatusOK, gin.H{"city": form.City, "phone": form.Phone, "telegram": form.Telegram, "path": form.Path})
 }
