@@ -353,7 +353,7 @@ func GetUserOtherInfo(context *gin.Context) {
 		return
 	}
 	var form model.ResponseUserOtherInfo
-	err := database.Db.QueryRow("SELECT name, surname, patronymic, age, gender, about FROM vetdonor_user_other_info WHERE email = $1", request.Email).Scan(&form.Name, &form.Surname, &form.Patronymic, &form.Age, &form.Gender, &form.About)
+	err := database.Db.QueryRow("SELECT city, phone, telegram, path FROM vetdonor_user_other_info WHERE email = $1", request.Email).Scan(&form.City, &form.Phone, &form.Telegram, &form.Path)
 	if err != nil {
 		fmt.Println(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user's other info"})
