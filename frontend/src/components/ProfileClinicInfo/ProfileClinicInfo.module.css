@@ -49,8 +49,8 @@
 
 .types_item {
     cursor: pointer;
-    border: 1px solid #b2b2b2;
-    background: #ebebeb;
+    border: 1px solid #e2a9a9;
+    background:  #f8eded;
     border-radius: 6px;
     padding: 10px;
     text-align: center;
@@ -68,7 +68,7 @@
 .types_item p {
     font-weight: 500;
     font-size: 16px;
-    color: #a5a5a5;
+    color: #c43939;
 }
 
 .typesOfBlood {

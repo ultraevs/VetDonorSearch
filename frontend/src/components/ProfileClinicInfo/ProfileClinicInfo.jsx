@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ProfileClinicInfo.module.css";
 
 import TelegramCircle from "../../assets/img/telegramCircle.svg";
@@ -6,24 +6,17 @@ import TelegramCircle from "../../assets/img/telegramCircle.svg";
 import useProfileData from "../../pages/Main/http";
 
 const ProfileClinicInfo = () => {
-  const typesBlood = [
-    { "AB+": false },
-    { "AB+": false },
-    { "CD+": false },
-    { "AB+": false },
-    { "AA+": false },
-    { "AB+": true },
-    { "BB+": false },
-    { "AB+": false },
-    { "AB+": false },
-    { "AB+": false },
-  ];
 
-  const handleClick = (index) => {
-    const bloodType = typesBlood[index];
-    const key = Object.keys(bloodType)[0];
-    typesBlood[index][key] = !bloodType[key];
-    console.log(typesBlood)
+  const arrayEx = ["AB+", "AA+", "BB+", "B+", "BC+", "CC+", "C+", "ABs+", "dB+", "PO"];
+
+  const [activeArr, setActiveArr] = useState([])
+
+  const handleClick = (item) => {
+    if (activeArr.includes(item)) {
+      setActiveArr([...activeArr.filter((elem) => elem !== item)])
+    } else {
+      setActiveArr([...activeArr, item])
+    }
   };
   
   const profileData = useProfileData();
@@ -69,16 +62,14 @@ const ProfileClinicInfo = () => {
               </p>
               <div className={styles.typesOfBlood}>
                 <div className={styles.types_wrapper}>
-                  {typesBlood.map((bloodType, index) => {
-                    const value = Object.values(bloodType)[0];
+                  {arrayEx.map((item) => {
                     return (
                       <div
-                        key={index}
-                        className={`${styles.types_item} ${value ? `${styles.activeType}` : ``}`}
-                        // className={`${styles.types_item} ${value ? styles.activeType : ""}`}
-                        onClick={() => handleClick(index)}
+                        key={item}
+                        className={`${styles.types_item} ${activeArr.includes(item) ? `${styles.activeType}` : ``}`}
+                        onClick={() => handleClick(item)}
                       >
-                        <p>{Object.keys(bloodType)[0]}</p>
+                        <p>{item}</p>
                       </div>
                     );
                   })}

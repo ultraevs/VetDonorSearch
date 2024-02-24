@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
+import { NavLink } from "react-router-dom";
 
 import classNames from "class-names";
 
@@ -88,9 +89,9 @@ const Auth = () => {
             />
           </div>
         </div>
-        <div className={styles.forgot_password}>
+        <NavLink to="/Forgot" className={styles.forgot_password}>
           <p>Забыли пароль?</p>
-        </div>
+        </NavLink>
         <div className={styles.enter}>
           <Link>
             <button
