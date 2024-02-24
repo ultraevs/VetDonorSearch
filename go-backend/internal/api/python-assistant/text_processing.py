@@ -10,6 +10,11 @@ import json
 import requests
 import sys
 
+local_path = r'/Users/ivanloboda/Documents/code/soba4ki/nn-text/'
+server_path = r'internal/api/python-assistant/'
+
+ide_path = server_path
+
 logging.basicConfig(level=logging.CRITICAL)
 
 def train(df):
@@ -24,14 +29,14 @@ def train(df):
     # Сохраняем модель и векторизатор с помощью pickle
     with open('model.pkl', 'wb') as model_file:
         pickle.dump(model, model_file)
-        print('Model saved to model.pkl')
+
 
     with open('vectorizer.pkl', 'wb') as vectorizer_file:
         pickle.dump(tfidf_vectorizer, vectorizer_file)
-        print('Vectorizer saved to vectorizer.pkl')
+
 
 def extract_city(text):
-    df = pd.read_csv(fr'internal/api/python-assistant/cities.csv')
+    df = pd.read_csv(fr'{ide_path}cities.csv')
     cities_list = df.iloc[:, 1].tolist()
 
     morph_analyzer = pymorphy2.MorphAnalyzer()
@@ -51,7 +56,7 @@ def predict(text, model, vectorizer):
     return predicted_class
 
 def load_answers():
-    with open('internal/api/python-assistant/answers.json', 'r') as f:
+    with open(fr'{ide_path}answers.json', 'r', encoding="utf-8") as f:
         return json.load(f)
 
 def main(text, retrain=False):
@@ -66,20 +71,20 @@ def main(text, retrain=False):
     answers = load_answers()
     
     if retrain:
-        df = pd.read_csv(f'internal/api/python-assistant/train_classes.csv')
+        df = pd.read_csv(f'{ide_path}train_classes.csv')
         train(df)
 
     # Загрузка модели и векторайзера
-    with open('internal/api/python-assistant/model.pkl', 'rb') as model_file:
+    with open(fr'{ide_path}model.pkl', 'rb') as model_file:
         model = pickle.load(model_file)
-    with open('internal/api/python-assistant/vectorizer.pkl', 'rb') as vectorizer_file:
+    with open(fr'{ide_path}vectorizer.pkl', 'rb') as vectorizer_file:
         vectorizer = pickle.load(vectorizer_file)
 
     class_ = predict(text, model, vectorizer)
     if class_ in ['getblood', 'giveblood']:
         city = extract_city(text)
     if city != None:
-        df = pd.read_csv(fr'internal/api/python-assistant/cities.csv')
+        df = pd.read_csv(fr'{ide_path}cities.csv')
         index = df[df.iloc[:, 1] == city].index[0]
         city_code = df.iloc[index, 0]
         is_city = True
@@ -98,7 +103,7 @@ def main(text, retrain=False):
 
     formatted_clinics_text = ''
     for clinic in allowed_cards:
-        formatted_clinics_text += f'{clinic["name"]}\n{clinic["address"]}\n{clinic["contacts"]}\n\n'
+        formatted_clinics_text += f'{clinic["name"]}\n{clinic["address"]}\n{clinic["contacts"]}\n'
 
     if is_city:
         ans = f'{answers[f"{is_city}"][class_].format(city.capitalize())}\n\n{formatted_clinics_text}'
@@ -107,11 +112,13 @@ def main(text, retrain=False):
     return ans
 
 
-# Если скрипт вызывается непосредственно, а не импортируется
 if __name__ == "__main__":
     arg1 = sys.argv[1]
     response = {"callback": main(arg1)}
+    
+    with open(f"{ide_path}result.json", "w", encoding='utf-8') as file:
+        json.dump(response, file, ensure_ascii=False)
 
-    # Кодируем ответ в JSON и выводим его с указанием кодировки utf-8
-    json_response = json.dumps(response, ensure_ascii=False).encode('utf-8')
-    print(json_response.decode())
+
+    print(1)
+    

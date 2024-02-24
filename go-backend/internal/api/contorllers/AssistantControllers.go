@@ -2,11 +2,13 @@ package controller
 
 import (
 	"app/internal/model"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 	"os/exec"
-	"strings"
+	"path/filepath"
 )
 
 // Message Сообщение ассистенту.
@@ -32,8 +34,25 @@ func Message(context *gin.Context) {
 	fmt.Println(output)
 	cmd = exec.Command("py", pythonScript, mes.MessageText)
 	output, _ = cmd.Output()
-	outputStr := string(output)
-	outputStr = strings.ReplaceAll(outputStr, "\\n", "") // Заменяем символы переноса строки, если нужно
+	resultPath := filepath.Join(filepath.Dir(pythonScript), "result.json")
+	file, err := os.Open(resultPath)
+	if err != nil {
+		fmt.Println("Ошибка при открытии файла:", err)
+		return
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
 
-	context.JSON(http.StatusOK, gin.H{"callback": outputStr})
+		}
+	}(file)
+
+	var data interface{}
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&data); err != nil {
+		fmt.Println("Ошибка при декодировании JSON:", err)
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"callback": data})
 }
